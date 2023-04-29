@@ -9,9 +9,11 @@ export const ForcesDataArray: React.FC<IForcesDataArrayProps> = (
   props: IForcesDataArrayProps
 ) => {
   const { forces, setForce } = props;
-  const columns: MUIDataTableColumnDef[] = Object.keys(forces[0]).map((x) => {
-    return { name: x, label: x };
-  });
+  const columns: MUIDataTableColumnDef[] = Object.keys(forces[0])
+    .map((x) => {
+      return { name: x, label: x };
+    })
+    .reverse();
   return (
     <Paper>
       <Grid
@@ -22,7 +24,6 @@ export const ForcesDataArray: React.FC<IForcesDataArrayProps> = (
         direction="column"
         padding={2}
         width="100%"
-        spacing={1}
       >
         <Grid item width="100%">
           <MUIDataTable
@@ -34,7 +35,7 @@ export const ForcesDataArray: React.FC<IForcesDataArrayProps> = (
               onRowClick: (rowData: string[]) => {
                 setForce(
                   forces.find(
-                    (x) => x.id === rowData[0] && x.name === rowData[1]
+                    (x) => x.id === rowData[1] && x.name === rowData[0]
                   )
                 );
               },
