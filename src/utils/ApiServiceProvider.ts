@@ -4,6 +4,7 @@ import IAllForce from "../common/ApiTypes/IAllForces";
 import ICrimeReport from "../common/ApiTypes/ICrimeReport";
 import Constants from "../common/Constants";
 import IPoliceService from "../common/ApiTypes/IPoliceService";
+import ICrimeData from "../common/ApiTypes/ICrimeData";
 export default abstract class ApiServiceProvider {
   private static _httpClient = axios.create({
     baseURL: "https://data.police.uk/api",
@@ -28,17 +29,32 @@ export default abstract class ApiServiceProvider {
     );
     return request.data;
   }
-  public static async ForceCrimes(
-    force: IAllForce,
-    crime?: string
-  ): Promise<ICrimeReport[]> {
+  public static async CrimeWithLocation(
+    date: Date,
+    lat: number,
+    lng: number
+  ): Promise<ICrimeData[]> {
+    const request = await this._httpClient.get<ICrimeData[]>(
+      `crimes-at-location?date=${this._fixDate(date)}&lat=${lat}&lng=${lng}`
+    );
+    return request.data;
+  }
+  public static async ForceCrimes({
+    force,
+    crime,
+    date,
+  }: {
+    force: IAllForce;
+    crime?: string;
+    date?: Date;
+  }): Promise<ICrimeReport[]> {
     if (!this._forceExist(force)) {
       throw new Error(Constants.invalidForce);
     }
     const request = await this._httpClient.get<ICrimeReport[]>(
       `crimes-no-location?category=${crime ? crime : "all-crime"}&force=${
         force.id
-      }`
+      }${date ? `&date=${this._fixDate(date)}` : ""}`
     );
     return request.data;
   }
