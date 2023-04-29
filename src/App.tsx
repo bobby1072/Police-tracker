@@ -4,7 +4,7 @@ import { ThemeProvider } from "@mui/material";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { mainTheme } from "./utils/Theme";
 import { useEffect } from "react";
-import ForceLocater from "./pages/ForceLocater";
+import { ForceLocater } from "./pages/ForceLocater";
 const queryClient = new QueryClient();
 function App() {
   useEffect(() => {

@@ -45,7 +45,7 @@ export const MainAppBar: React.FC = () => {
           boxShadow: "0 4px 16px rgba(0, 0, 0, 0.9)",
         }}
       >
-        <AppBar position="static" sx={{ padding: 1 }}>
+        <AppBar position="static" sx={{ padding: 3 }}>
           <Toolbar>
             <IconButton
               color="inherit"
@@ -54,9 +54,9 @@ export const MainAppBar: React.FC = () => {
               edge="start"
               sx={{ mr: 2 }}
             >
-              <MenuIcon />
+              <MenuIcon fontSize="large" />
             </IconButton>
-            <Typography fontSize={45} variant="subtitle2">
+            <Typography fontSize={50} variant="subtitle2">
               Police-Tracker
             </Typography>
           </Toolbar>
@@ -97,7 +97,7 @@ export const MainAppBar: React.FC = () => {
               <ListItemIcon>
                 <ModeStandbyIcon />
               </ListItemIcon>
-              <ListItemText primary="CPU" />
+              <ListItemText primary="Force" />
             </ListItemButton>
           </ListItem>
         </List>

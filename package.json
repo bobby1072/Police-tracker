@@ -5,11 +5,15 @@
   "dependencies": {
     "@emotion/react": "^11.10.8",
     "@emotion/styled": "^11.10.8",
+    "@googlemaps/js-api-loader": "^1.15.1",
     "@mui/icons-material": "^5.11.16",
     "@mui/material": "^5.12.2",
+    "@react-google-maps/api": "^2.18.1",
     "axios": "^1.4.0",
+    "mui-datatables": "^4.3.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-geocode": "^0.2.3",
     "react-query": "^3.39.3",
     "react-router-dom": "^6.11.0",
     "react-scripts": "5.0.1",
@@ -46,9 +50,11 @@
     "@testing-library/user-event": "^13.5.0",
     "@types/axios": "^0.14.0",
     "@types/jest": "^27.5.2",
+    "@types/mui-datatables": "^4.3.4",
     "@types/node": "^16.18.25",
     "@types/react": "^18.2.0",
     "@types/react-dom": "^18.2.1",
+    "@types/react-geocode": "^0.2.1",
     "@types/react-query": "^1.2.9",
     "@types/react-router-dom": "^5.3.3"
   }
