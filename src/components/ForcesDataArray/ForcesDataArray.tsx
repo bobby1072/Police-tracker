@@ -32,15 +32,14 @@ export const ForcesDataArray: React.FC<IForcesDataArrayProps> = (
             data={forces}
             options={{
               selectableRows: "none",
-              onRowClick: (rowData: string[]) => {
+              filter: false,
+              onRowClick: (rowData: string[], rowMeta) => {
                 setForce(
-                  forces.find(
-                    (x) => x.id === rowData[1] && x.name === rowData[0]
-                  )
+                  forces.find((x, xIndex) => xIndex === rowMeta.dataIndex)
                 );
               },
-              print: false,
-              download: false,
+              print: true,
+              download: true,
             }}
           />
         </Grid>

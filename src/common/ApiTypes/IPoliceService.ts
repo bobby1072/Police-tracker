@@ -5,6 +5,7 @@ export default interface IPoliceService {
     url: string;
     description: string;
     title: string;
+    type: string;
   }[];
   telephone: string;
   id: string;

@@ -7,6 +7,7 @@ import {
   TableRow,
   TableCell,
   Button,
+  Link,
 } from "@mui/material";
 import { useQuery } from "react-query";
 import ApiServiceProvider from "../../utils/ApiServiceProvider";
@@ -14,6 +15,7 @@ import IPoliceService from "../../common/ApiTypes/IPoliceService";
 import ICrimeReport from "../../common/ApiTypes/ICrimeReport";
 import IOfficerBio from "../../common/ApiTypes/IOfficerBio";
 import MUIDataTable from "mui-datatables";
+import { CrimeBarChart } from "../CrimeGraphs/CrimeBarChart";
 const style = {
   position: "absolute",
   top: "50%",
@@ -105,10 +107,39 @@ const ModalAddonFunc: React.FC<IModalAddOnFuncProps> = (
           Phone number: {policeService.telephone}
         </Typography>
       </Grid>
+      {policeService.url && (
+        <Link href={policeService.url} fontSize={25}>
+          Police force website
+        </Link>
+      )}
       <Grid item>
-        <Button variant="outlined" onClick={closeModal}>
-          Close
-        </Button>
+        <Grid
+          container
+          justifyContent="center"
+          alignItems="center"
+          direction="row"
+          spacing={2}
+        >
+          <Grid item>
+            <Button variant="outlined" onClick={closeModal}>
+              Close
+            </Button>
+          </Grid>
+          {policeService.engagement_methods
+            .filter((x) => x.type !== "telephone" && x.type !== "web")
+            .map((x) => (
+              <Grid item>
+                <Button
+                  variant="contained"
+                  onClick={() => {
+                    window.location.href = x.url;
+                  }}
+                >
+                  {x.title}
+                </Button>
+              </Grid>
+            ))}
+        </Grid>
       </Grid>
       {officerBio.length > 0 &&
         (officerBio[0].bio || officerBio[0].contact_details) && (
@@ -200,7 +231,10 @@ const ModalAddonFunc: React.FC<IModalAddOnFuncProps> = (
             </Grid>
           </Grid>
         )}
-      {crimeReport.length > 0 && (
+      {crimeReport.length > 0 && [
+        <Grid item width="100%" minHeight="80vh">
+          <CrimeBarChart crimes={crimeReport} />
+        </Grid>,
         <Grid item width="100%">
           <MUIDataTable
             columns={Object.keys(sortedCrimeReports[0]).map((x) => {
@@ -288,8 +322,8 @@ const ModalAddonFunc: React.FC<IModalAddOnFuncProps> = (
               },
             }}
           />
-        </Grid>
-      )}
+        </Grid>,
+      ]}
     </Grid>
   );
 };
@@ -328,7 +362,6 @@ export const ForceModal: React.FC<IForceModalProps> = (
           justifyContent="center"
           alignItems="center"
           direction="column"
-          padding={4}
         >
           {isLoading || !data ? (
             <Grid
