@@ -231,10 +231,13 @@ const ModalAddonFunc: React.FC<IModalAddOnFuncProps> = (
             </Grid>
           </Grid>
         )}
-      {crimeReport.length > 0 && [
+
+      {crimeReport.length > 0 && (
         <Grid item width="100%" minHeight="80vh">
           <CrimeBarChart crimes={crimeReport} />
-        </Grid>,
+        </Grid>
+      )}
+      {crimeReport.length > 0 && (
         <Grid item width="100%">
           <MUIDataTable
             columns={Object.keys(sortedCrimeReports[0]).map((x) => {
@@ -322,8 +325,8 @@ const ModalAddonFunc: React.FC<IModalAddOnFuncProps> = (
               },
             }}
           />
-        </Grid>,
-      ]}
+        </Grid>
+      )}
     </Grid>
   );
 };

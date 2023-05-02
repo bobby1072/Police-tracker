@@ -4,6 +4,7 @@ import { Paper, useTheme } from "@mui/material";
 interface ICrimeBarChartProps {
   crimes: ICrimeReport[];
 }
+
 export const CrimeBarChart: React.FC<ICrimeBarChartProps> = ({ crimes }) => {
   const theme = useTheme();
   const categories = crimes.map((crime) => crime.category);
@@ -37,12 +38,13 @@ export const CrimeBarChart: React.FC<ICrimeBarChartProps> = ({ crimes }) => {
           fontSize: "16px",
         },
       },
-      title: {
-        text: "Number of crimes",
-        style: {
-          fontSize: "20px",
-        },
+    },
+    title: {
+      text: "Number of crimes",
+      style: {
+        fontSize: "20px",
       },
+      align: "center",
     },
   };
   return (
