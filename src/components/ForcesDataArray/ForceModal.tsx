@@ -400,7 +400,7 @@ export const ForceModal: React.FC<IForceModalProps> = (
           alignItems="center"
           direction="column"
         >
-          {isLoading || !data ? (
+          {isLoading && !data ? (
             <Grid
               item
               sx={{
@@ -419,7 +419,7 @@ export const ForceModal: React.FC<IForceModalProps> = (
             </Grid>
           ) : (
             <Grid item width="100%">
-              <ModalAddonFunc reports={data} closeModal={closeModal} />
+              <ModalAddonFunc reports={data!} closeModal={closeModal} />
             </Grid>
           )}
         </Grid>
