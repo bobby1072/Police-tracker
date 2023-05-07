@@ -246,21 +246,21 @@ const ModalAddonFunc: React.FC<IModalAddOnFuncProps> = (
             </Grid>
           </Grid>
         )}
-      <Grid item width="100%" minHeight="60vh">
-        <Paper>
-          <Tabs
-            value={crimeDisplay}
-            onChange={handleChange}
-            aria-label="basic tabs example"
-            sx={{ mb: 2 }}
-          >
-            <Tab label="Data table" {...a11yProps(0)} />
-            <Tab label="Pie chart" {...a11yProps(1)} />
-          </Tabs>
-          <Divider />
-          <div style={{ padding: 7 }}>
-            {crimeReport.length > 0 &&
-              (crimeDisplay !== 0 ? (
+      {crimeReport.length > 0 && (
+        <Grid item width="100%" minHeight="60vh">
+          <Paper>
+            <Tabs
+              value={crimeDisplay}
+              onChange={handleChange}
+              aria-label="basic tabs example"
+              sx={{ mb: 2 }}
+            >
+              <Tab label="Data table" {...a11yProps(0)} />
+              <Tab label="Pie chart" {...a11yProps(1)} />
+            </Tabs>
+            <Divider />
+            <div style={{ padding: 7 }}>
+              {crimeDisplay !== 0 ? (
                 <CrimeBarChart crimes={crimeReport} />
               ) : (
                 <MUIDataTable
@@ -356,10 +356,11 @@ const ModalAddonFunc: React.FC<IModalAddOnFuncProps> = (
                     },
                   }}
                 />
-              ))}
-          </div>
-        </Paper>
-      </Grid>
+              )}
+            </div>
+          </Paper>
+        </Grid>
+      )}
     </Grid>
   );
 };

@@ -4,12 +4,58 @@ import { Paper, Typography } from "@mui/material";
 interface ICrimeBarChartProps {
   crimes: ICrimeReport[];
 }
-const generateBrightRandomColor = (): string => {
-  const r = Math.floor(Math.random() * 128 + 128);
-  const g = Math.floor(Math.random() * 128 + 128);
-  const b = Math.floor(Math.random() * 128 + 128);
-  const hex = ((r << 16) | (g << 8) | b).toString(16);
-  return "#" + hex.padStart(6, "0").toUpperCase();
+const generateBrightRandomColor = (): any => {
+  const minBrightness = 70;
+  const maxBrightness = 255;
+  const minSaturation = 50;
+  const maxSaturation = 100;
+  const maxLuminance = 0.75;
+  let h = Math.floor(Math.random() * 360);
+  let s = Math.floor(
+    Math.random() * (maxSaturation - minSaturation + 1) + minSaturation
+  );
+  let b = Math.floor(
+    Math.random() * (maxBrightness - minBrightness + 1) + minBrightness
+  );
+  const c = (1 - Math.abs(2 * (b / 255) - 1)) * (s / 100);
+  const x = c * (1 - Math.abs(((h / 60) % 2) - 1));
+  const m = b / 255 - c / 2;
+  let r: number, g: number, bl: number;
+  if (h >= 0 && h < 60) {
+    r = c;
+    g = x;
+    bl = 0;
+  } else if (h >= 60 && h < 120) {
+    r = x;
+    g = c;
+    bl = 0;
+  } else if (h >= 120 && h < 180) {
+    r = 0;
+    g = c;
+    bl = x;
+  } else if (h >= 180 && h < 240) {
+    r = 0;
+    g = x;
+    bl = c;
+  } else if (h >= 240 && h < 300) {
+    r = x;
+    g = 0;
+    bl = c;
+  } else {
+    r = c;
+    g = 0;
+    bl = x;
+  }
+  r = Math.round((r + m) * 255);
+  g = Math.round((g + m) * 255);
+  bl = Math.round((bl + m) * 255);
+  const luminance = (0.299 * r + 0.587 * g + 0.114 * bl) / 255;
+  if (luminance < 0.4 || (r === g && g === bl) || luminance > maxLuminance) {
+    return generateBrightRandomColor();
+  }
+  const hex = ((r << 16) | (g << 8) | bl).toString(16);
+
+  return "#" + hex.padStart(6, "0");
 };
 export const CrimeBarChart: React.FC<ICrimeBarChartProps> = ({ crimes }) => {
   const categories = crimes.reduce((acc, report) => {
