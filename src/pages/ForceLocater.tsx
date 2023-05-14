@@ -2,8 +2,8 @@ import { Grid, Paper, Tabs, Tab, Divider } from "@mui/material";
 import { MainAppBar } from "../common/AppBar";
 import { ForcesDataArray } from "../components/ForcesDataArray/ForcesDataArray";
 import IAllForce from "../common/ApiTypes/IAllForces";
-import { useState } from "react";
-import { ForceModal } from "../components/ForcesDataArray/ForceModal";
+import { useState, useEffect } from "react";
+import { ForceModal } from "../components/ForceModal/ForceModal";
 import { useAllForces, useStopSearchAvailability } from "../utils/Querys";
 import { ForceGridContainer } from "../components/ForceGridView/ForceGridContainer";
 import { Loading } from "../common/Loading";
@@ -23,6 +23,11 @@ export const ForceLocater: React.FC = () => {
     error: forceErrors,
   } = useAllForces();
   const { data: stopSearchAvailability } = useStopSearchAvailability();
+  useEffect(() => {
+    if (allForce) {
+      console.log(allForce.length);
+    }
+  }, [allForce]);
   return (
     <div>
       <MainAppBar />

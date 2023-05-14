@@ -13,11 +13,12 @@ import IPoliceService from "../../common/ApiTypes/IPoliceService";
 import ICrimeReport from "../../common/ApiTypes/ICrimeReport";
 import IOfficerBio from "../../common/ApiTypes/IOfficerBio";
 import { CrimeBarChart } from "../CrimeGraphs/CrimeBarChart";
-import { OfficerBioTable } from "./OfficerBioTable";
 import { CrimeTable } from "./CrimeTable";
+import { OfficerBioTable } from "./OfficerBioTable";
 interface IModalAddOnFuncProps {
   reports: [ICrimeReport[], IPoliceService, IOfficerBio[]];
   closeModal: () => void;
+  stopSearchDataAvailable?: Date[];
 }
 const a11yProps = (index: number) => {
   return {
@@ -33,13 +34,11 @@ export const getDate = (dateString: string) => {
   const timestamp: number = Math.floor(date.getTime() / 1000);
   return timestamp;
 };
-export const ModalAddonFunc: React.FC<IModalAddOnFuncProps> = (
-  props: IModalAddOnFuncProps
-) => {
-  const {
-    reports: [crimeReport, policeService, officerBio],
-    closeModal,
-  } = props;
+export const ModalAddonFunc: React.FC<IModalAddOnFuncProps> = ({
+  closeModal,
+  reports: [crimeReport, policeService, officerBio],
+  stopSearchDataAvailable,
+}) => {
   const sortedCrimeReports = crimeReport.sort((a, b) => {
     const [aTimeStamp, bTimeStamp] = [getDate(a.month), getDate(b.month)];
     return aTimeStamp - bTimeStamp;

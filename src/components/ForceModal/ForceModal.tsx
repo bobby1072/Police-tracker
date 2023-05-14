@@ -25,10 +25,11 @@ interface IForceModalProps {
   closeModal: () => void;
   stopSearchDataAvailable?: Date[];
 }
-export const ForceModal: React.FC<IForceModalProps> = (
-  props: IForceModalProps
-) => {
-  const { closeModal, force } = props;
+export const ForceModal: React.FC<IForceModalProps> = ({
+  closeModal,
+  force,
+  stopSearchDataAvailable,
+}) => {
   const { data, isLoading, error } = useForceCrimeInfoAndOfficers(force);
   return error ? (
     <div onLoad={closeModal}></div>
@@ -70,7 +71,11 @@ export const ForceModal: React.FC<IForceModalProps> = (
             </Grid>
           ) : (
             <Grid item width="100%">
-              <ModalAddonFunc reports={data!} closeModal={closeModal} />
+              <ModalAddonFunc
+                reports={data!}
+                closeModal={closeModal}
+                stopSearchDataAvailable={stopSearchDataAvailable}
+              />
             </Grid>
           )}
         </Grid>

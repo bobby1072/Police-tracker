@@ -29,6 +29,11 @@ const calcMaxPages = (len: number, matchRange: IMatchRange) => {
   const remainder = len % matchRange.perPage;
   return (len - remainder) / matchRange.perPage + 1;
 };
+const allowIndex = (indexNum: number, matchRange: IMatchRange): boolean => {
+  const topRange = matchRange.perPage * matchRange.pageNum;
+  const bottomRange = topRange - matchRange.perPage;
+  return indexNum <= topRange && indexNum > bottomRange ? true : false;
+};
 export const ForceGridContainer: React.FC<IForceGridContainerProps> = ({
   forces,
   setFocusForce,
@@ -46,16 +51,17 @@ export const ForceGridContainer: React.FC<IForceGridContainerProps> = ({
     });
   }, [shownForces]);
   useEffect(() => {
-    setShownForces((_) =>
-      forces.filter(
+    setShownForces((_) => {
+      const lowerVal = searchVal.toLowerCase();
+      return forces.filter(
         (x) =>
-          x.name.toLowerCase().includes(searchVal.toLowerCase()) ||
-          x.id.toLowerCase().includes(searchVal.toLowerCase())
-      )
-    );
+          x.name.toLowerCase().includes(lowerVal) ||
+          x.id.toLowerCase().includes(lowerVal)
+      );
+    });
   }, [searchVal, forces]);
   return (
-    <Grid container direction="column" padding={1.5} spacing={1}>
+    <Grid container direction="column" spacing={1}>
       <Grid item width="100%">
         <Grid
           container
@@ -63,12 +69,12 @@ export const ForceGridContainer: React.FC<IForceGridContainerProps> = ({
           alignItems="center"
           direction="row"
         >
-          <Grid item width="53%">
+          <Grid item width="60%">
             <Typography textAlign="right" variant="subtitle2" fontSize={40}>
-              Forces
+              Police forces
             </Typography>
           </Grid>
-          <Grid item width="47%">
+          <Grid item width="40%">
             <Grid
               container
               justifyContent="flex-end"
@@ -115,13 +121,7 @@ export const ForceGridContainer: React.FC<IForceGridContainerProps> = ({
           padding={3}
         >
           {shownForces
-            .filter(
-              (_, index) =>
-                index <= (matchRange.perPage - 1) * matchRange.pageNum &&
-                index >=
-                  (matchRange.perPage - 1) * matchRange.pageNum -
-                    (matchRange.perPage - 1)
-            )
+            .filter((_, index) => allowIndex(index + 1, matchRange))
             .map((x) => {
               return (
                 <Grid item width="33%">
