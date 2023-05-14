@@ -15,10 +15,18 @@ import IOfficerBio from "../../common/ApiTypes/IOfficerBio";
 import { CrimeBarChart } from "../CrimeGraphs/CrimeBarChart";
 import { CrimeTable } from "./CrimeTable";
 import { OfficerBioTable } from "./OfficerBioTable";
+import Accordion from "@mui/material/Accordion";
+import AccordionSummary from "@mui/material/AccordionSummary";
+import AccordionDetails from "@mui/material/AccordionDetails";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 interface IModalAddOnFuncProps {
   reports: [ICrimeReport[], IPoliceService, IOfficerBio[]];
   closeModal: () => void;
   stopSearchDataAvailable?: Date[];
+}
+interface IAccordionExpanded {
+  officerBio: boolean;
+  recentCrimes: boolean;
 }
 const a11yProps = (index: number) => {
   return {
@@ -39,6 +47,10 @@ export const ModalAddonFunc: React.FC<IModalAddOnFuncProps> = ({
   reports: [crimeReport, policeService, officerBio],
   stopSearchDataAvailable,
 }) => {
+  const [accordionData, setAccordionData] = useState<IAccordionExpanded>({
+    officerBio: false,
+    recentCrimes: false,
+  });
   const sortedCrimeReports = crimeReport.sort((a, b) => {
     const [aTimeStamp, bTimeStamp] = [getDate(a.month), getDate(b.month)];
     return aTimeStamp - bTimeStamp;
@@ -71,15 +83,17 @@ export const ModalAddonFunc: React.FC<IModalAddOnFuncProps> = ({
           </Typography>
         </Grid>
       )}
-      <Grid item sx={{ mb: 2 }}>
+      <Grid item>
         <Typography fontSize={19} variant="subtitle2">
           Phone number: {policeService.telephone}
         </Typography>
       </Grid>
       {policeService.url && (
-        <Link href={policeService.url} fontSize={25}>
-          Police force website
-        </Link>
+        <Grid item>
+          <Link href={policeService.url} fontSize={25}>
+            Police force website
+          </Link>
+        </Grid>
       )}
       <Grid item>
         <Grid
@@ -110,37 +124,90 @@ export const ModalAddonFunc: React.FC<IModalAddOnFuncProps> = ({
             ))}
         </Grid>
       </Grid>
-      {officerBio.length > 0 &&
-        (officerBio[0].bio || officerBio[0].contact_details) && (
-          <Grid item width="100%">
-            <OfficerBioTable officerBio={officerBio} />
+      <div style={{ width: "100%" }}>
+        {officerBio.length > 0 &&
+          (officerBio[0].bio || officerBio[0].contact_details) && (
+            <Grid item width="100%" sx={{ mb: 2 }}>
+              <Accordion
+                expanded={accordionData.officerBio}
+                onChange={(event, expand) =>
+                  setAccordionData((_) => ({
+                    officerBio: expand,
+                    recentCrimes: _.recentCrimes,
+                  }))
+                }
+              >
+                <AccordionSummary
+                  expandIcon={<ExpandMoreIcon />}
+                  aria-controls="panel1a-content"
+                  id="panel1a-header"
+                >
+                  <Typography variant="subtitle2" fontSize={30}>
+                    Officer information
+                  </Typography>
+                </AccordionSummary>
+                <Divider />
+                <AccordionDetails>
+                  {accordionData.officerBio && (
+                    <OfficerBioTable officerBio={officerBio} />
+                  )}
+                </AccordionDetails>
+              </Accordion>
+            </Grid>
+          )}
+        {crimeReport.length > 0 && (
+          <Grid item width="100%" sx={{ mb: 2 }}>
+            <Accordion
+              expanded={accordionData.recentCrimes}
+              onChange={(event, expand) =>
+                setAccordionData((_) => ({
+                  officerBio: _.officerBio,
+                  recentCrimes: expand,
+                }))
+              }
+            >
+              <AccordionSummary
+                expandIcon={<ExpandMoreIcon />}
+                aria-controls="panel1a-content"
+                id="panel1a-header"
+              >
+                <Typography variant="subtitle2" fontSize={30}>
+                  Recent crime reports
+                </Typography>
+              </AccordionSummary>
+              <Divider />
+              <AccordionDetails>
+                {accordionData.recentCrimes && (
+                  <Paper>
+                    <Tabs
+                      value={crimeDisplay}
+                      onChange={(
+                        event: React.SyntheticEvent,
+                        newValue: number
+                      ) => {
+                        setCrimeDisplay(newValue);
+                      }}
+                      aria-label="basic tabs example"
+                      sx={{ mb: 2 }}
+                    >
+                      <Tab label="Data table" {...a11yProps(0)} />
+                      <Tab label="Pie chart" {...a11yProps(1)} />
+                    </Tabs>
+                    <Divider />
+                    <div style={{ padding: 7 }}>
+                      {crimeDisplay !== 0 ? (
+                        <CrimeBarChart crimes={crimeReport} />
+                      ) : (
+                        <CrimeTable sortedCrimeReports={sortedCrimeReports} />
+                      )}
+                    </div>
+                  </Paper>
+                )}
+              </AccordionDetails>
+            </Accordion>
           </Grid>
         )}
-      {crimeReport.length > 0 && (
-        <Grid item width="100%" minHeight="60vh">
-          <Paper>
-            <Tabs
-              value={crimeDisplay}
-              onChange={(event: React.SyntheticEvent, newValue: number) => {
-                setCrimeDisplay(newValue);
-              }}
-              aria-label="basic tabs example"
-              sx={{ mb: 2 }}
-            >
-              <Tab label="Data table" {...a11yProps(0)} />
-              <Tab label="Pie chart" {...a11yProps(1)} />
-            </Tabs>
-            <Divider />
-            <div style={{ padding: 7 }}>
-              {crimeDisplay !== 0 ? (
-                <CrimeBarChart crimes={crimeReport} />
-              ) : (
-                <CrimeTable sortedCrimeReports={sortedCrimeReports} />
-              )}
-            </div>
-          </Paper>
-        </Grid>
-      )}
+      </div>
     </Grid>
   );
 };
