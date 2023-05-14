@@ -22,6 +22,7 @@ const style = {
 interface IForceModalProps {
   force: IAllForce;
   closeModal: () => void;
+  stopSearchDataAvailable?: Date[];
 }
 export const ForceModal: React.FC<IForceModalProps> = (
   props: IForceModalProps

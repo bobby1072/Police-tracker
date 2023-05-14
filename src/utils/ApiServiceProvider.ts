@@ -6,6 +6,7 @@ import Constants from "../common/Constants";
 import IPoliceService from "../common/ApiTypes/IPoliceService";
 import ICrimeData from "../common/ApiTypes/ICrimeData";
 import IOfficerBio from "../common/ApiTypes/IOfficerBio";
+import ICrimeStreetDates from "../common/ApiTypes/ICrimeStreetDates";
 export default abstract class ApiServiceProvider {
   private static _httpClient = axios.create({
     baseURL: "https://data.police.uk/api",
@@ -63,6 +64,21 @@ export default abstract class ApiServiceProvider {
     const foundForce = this._forceExist(force);
     const request = await this._httpClient.get<IOfficerBio[]>(
       `forces/${foundForce.id}/people`
+    );
+    return request.data;
+  }
+  public static async ForceStopSearches(force: IAllForce, date: Date) {
+    const foundForce = this._forceExist(force);
+    const request = await this._httpClient.get(
+      `stops-force?force=${foundForce.id}&date=${this._fixDate(date)}`
+    );
+    return request.data;
+  }
+  public static async ForceStopSearchAvailability(): Promise<
+    ICrimeStreetDates[]
+  > {
+    const request = await this._httpClient.get<ICrimeStreetDates[]>(
+      "crimes-street-dates"
     );
     return request.data;
   }
