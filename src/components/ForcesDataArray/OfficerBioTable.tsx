@@ -48,6 +48,7 @@ export const OfficerBioTable: React.FC<IOfficerBioTableProps> = ({
           options={{
             selectableRows: "none",
             filter: false,
+            print: false,
             expandableRows: true,
             renderExpandableRow: (rowData, rowMeta) => {
               const x = muiData[rowMeta.dataIndex];

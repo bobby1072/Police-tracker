@@ -37,6 +37,7 @@ export const CrimeTable: React.FC<ICrimeTableProps> = ({
       data={sortedCrimeReports}
       title="Recent crime reports"
       options={{
+        print: false,
         selectableRows: "none",
         filter: false,
         expandableRows: true,

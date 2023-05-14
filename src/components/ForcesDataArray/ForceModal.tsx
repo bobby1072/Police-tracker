@@ -1,8 +1,9 @@
 import IAllForce from "../../common/ApiTypes/IAllForces";
 import Modal from "@mui/material/Modal";
-import { Box, Typography, Grid } from "@mui/material";
+import { Box, Grid } from "@mui/material";
 import { useForceCrimeInfoAndOfficers } from "../../utils/Querys";
 import { ModalAddonFunc } from "./ForceModalAddOn";
+import { Loading } from "../../common/Loading";
 const style = {
   position: "absolute",
   top: "50%",
@@ -65,9 +66,7 @@ export const ForceModal: React.FC<IForceModalProps> = (
                 textAlign: "center",
               }}
             >
-              <Typography fontSize={35} variant="subtitle2">
-                Loading...
-              </Typography>
+              <Loading />
             </Grid>
           ) : (
             <Grid item width="100%">

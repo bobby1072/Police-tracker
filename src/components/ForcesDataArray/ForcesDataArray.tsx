@@ -37,8 +37,7 @@ export const ForcesDataArray: React.FC<IForcesDataArrayProps> = (
                 forces.find((x, xIndex) => xIndex === rowMeta.dataIndex)
               );
             },
-            print: true,
-            download: true,
+            print: false,
           }}
         />
       </Grid>

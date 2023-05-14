@@ -45,7 +45,7 @@ export const MainAppBar: React.FC = () => {
           boxShadow: "0 4px 16px rgba(0, 0, 0, 0.9)",
         }}
       >
-        <AppBar position="static" sx={{ padding: 3 }}>
+        <AppBar position="static" sx={{ padding: 2.4 }}>
           <Toolbar>
             <IconButton
               color="inherit"

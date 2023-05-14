@@ -7,6 +7,12 @@ import ApiServiceProvider from "./ApiServiceProvider";
 import { AxiosError } from "axios";
 import ICrimeStreetDates from "../common/ApiTypes/ICrimeStreetDates";
 
+export const useAllForces = () => {
+  return useQuery<IAllForce[], AxiosError>("get-all-forces", () =>
+    ApiServiceProvider.GetAllForces()
+  );
+};
+
 export const useForceCrimeInfoAndOfficers = (force: IAllForce) => {
   return useQuery<[ICrimeReport[], IPoliceService, IOfficerBio[]], AxiosError>(
     "get-force-info",
