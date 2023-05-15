@@ -6,16 +6,19 @@ import IOfficerBio from "../common/ApiTypes/IOfficerBio";
 import ApiServiceProvider from "./ApiServiceProvider";
 import { AxiosError } from "axios";
 import ICrimeStreetDates from "../common/ApiTypes/ICrimeStreetDates";
+import Constants from "../common/Constants";
+import IPersonSearch from "../common/ApiTypes/IPersonSearch";
 
 export const useAllForces = () => {
-  return useQuery<IAllForce[], AxiosError>("get-all-forces", () =>
-    ApiServiceProvider.GetAllForces()
+  return useQuery<IAllForce[], AxiosError>(
+    Constants.QueryKeys.getAllForces,
+    () => ApiServiceProvider.GetAllForces()
   );
 };
 
 export const useForceCrimeInfoAndOfficers = (force: IAllForce) => {
   return useQuery<[ICrimeReport[], IPoliceService, IOfficerBio[]], AxiosError>(
-    "get-force-info",
+    Constants.QueryKeys.getForceInfo,
     () =>
       Promise.all([
         ApiServiceProvider.ForceCrimes({ force: force }),
@@ -26,12 +29,14 @@ export const useForceCrimeInfoAndOfficers = (force: IAllForce) => {
 };
 
 export const useForceStopAndSearch = (force: IAllForce, dates: Date[]) => {
-  return useQuery<any[], AxiosError>(
-    "get-stop-search-info",
+  return useQuery<IPersonSearch | IPersonSearch[], AxiosError>(
+    Constants.QueryKeys.getStopSearchInfo,
     () =>
-      Promise.all(
-        dates.map((x) => ApiServiceProvider.ForceStopSearches(force, x))
-      ),
+      dates.length === 1
+        ? ApiServiceProvider.ForceStopSearches(force, dates[0])
+        : Promise.all(
+            dates.map((x) => ApiServiceProvider.ForceStopSearches(force, x))
+          ),
     {
       retry: (count, error) => (error.response?.status === 502 ? false : true),
     }
@@ -40,7 +45,7 @@ export const useForceStopAndSearch = (force: IAllForce, dates: Date[]) => {
 
 export const useStopSearchAvailability = () => {
   return useQuery<ICrimeStreetDates[], AxiosError>(
-    "get-stop-search-availability",
+    Constants.QueryKeys.getStopSearchAvailability,
     () => ApiServiceProvider.ForceStopSearchAvailability(),
     {
       retry: () => false,

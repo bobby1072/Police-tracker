@@ -12,7 +12,7 @@ const style = {
   minWidth: "150vh",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  bgcolor: "background.paper",
+  bgcolor: "#F6F6F6",
   border: "2px solid #000",
   justifyContent: "center",
   alignItems: "center",
@@ -72,6 +72,7 @@ export const ForceModal: React.FC<IForceModalProps> = ({
           ) : (
             <Grid item width="100%">
               <ModalAddonFunc
+                force={force}
                 reports={data!}
                 closeModal={closeModal}
                 stopSearchDataAvailable={stopSearchDataAvailable}

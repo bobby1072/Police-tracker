@@ -8,6 +8,8 @@ import { useAllForces, useStopSearchAvailability } from "../utils/Querys";
 import { ForceGridContainer } from "../components/ForceGridView/ForceGridContainer";
 import { Loading } from "../common/Loading";
 import { Error } from "../common/Error";
+import { useQueryClient } from "react-query";
+import Constants from "../common/Constants";
 const a11yProps = (index: number) => {
   return {
     id: `simple-tab-${index}`,
@@ -23,11 +25,13 @@ export const ForceLocater: React.FC = () => {
     error: forceErrors,
   } = useAllForces();
   const { data: stopSearchAvailability } = useStopSearchAvailability();
+  const queryClient = useQueryClient();
   useEffect(() => {
-    if (allForce) {
-      console.log(allForce.length);
+    if (!focusForce) {
+      queryClient.removeQueries(Constants.QueryKeys.getForceInfo);
+      queryClient.removeQueries(Constants.QueryKeys.getStopSearchInfo);
     }
-  }, [allForce]);
+  }, [queryClient, focusForce]);
   return (
     <div>
       <MainAppBar />

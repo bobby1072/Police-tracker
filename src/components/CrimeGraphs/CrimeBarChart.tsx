@@ -4,7 +4,7 @@ import { Paper, Typography } from "@mui/material";
 interface ICrimeBarChartProps {
   crimes: ICrimeReport[];
 }
-const generateBrightRandomColor = (): any => {
+export const generateBrightRandomColor = (): any => {
   const minBrightness = 70;
   const maxBrightness = 255;
   const minSaturation = 50;
