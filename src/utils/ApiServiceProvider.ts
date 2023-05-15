@@ -60,7 +60,7 @@ export default abstract class ApiServiceProvider {
   public static async ForceStopSearches(
     force: IAllForce,
     date: Date
-  ): Promise<IPersonSearch> {
+  ): Promise<IPersonSearch[]> {
     const request = await this._httpClient.get(
       `stops-force?force=${force.id}&date=${this._fixDate(date)}`
     );

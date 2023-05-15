@@ -24,9 +24,9 @@ export default interface IPersonSearch {
   removal_of_more_than_outer_clothing: boolean;
   outcome_object: OutcomeObject;
   location: Location | null;
-  operation: null;
+  operation: null | string;
   officer_defined_ethnicity: string;
   type: string;
-  operation_name: null;
+  operation_name: null | string;
   object_of_search: string;
 }

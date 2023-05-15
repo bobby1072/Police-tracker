@@ -12,7 +12,10 @@ import IPersonSearch from "../common/ApiTypes/IPersonSearch";
 export const useAllForces = () => {
   return useQuery<IAllForce[], AxiosError>(
     Constants.QueryKeys.getAllForces,
-    () => ApiServiceProvider.GetAllForces()
+    () => ApiServiceProvider.GetAllForces(),
+    {
+      retry: (failureCount, error) => failureCount >= 5,
+    }
   );
 };
 
@@ -24,21 +27,27 @@ export const useForceCrimeInfoAndOfficers = (force: IAllForce) => {
         ApiServiceProvider.ForceCrimes({ force: force }),
         ApiServiceProvider.GetForceInfo(force),
         ApiServiceProvider.ForceOfficers(force),
-      ])
+      ]),
+    {
+      retry: (failureCount, error) => failureCount >= 5,
+    }
   );
 };
 
 export const useForceStopAndSearch = (force: IAllForce, dates: Date[]) => {
-  return useQuery<IPersonSearch | IPersonSearch[], AxiosError>(
+  return useQuery<IPersonSearch[][], AxiosError>(
     Constants.QueryKeys.getStopSearchInfo,
     () =>
-      dates.length === 1
-        ? ApiServiceProvider.ForceStopSearches(force, dates[0])
-        : Promise.all(
-            dates.map((x) => ApiServiceProvider.ForceStopSearches(force, x))
-          ),
+      Promise.all(
+        dates.map((x) => ApiServiceProvider.ForceStopSearches(force, x))
+      ),
     {
-      retry: (count, error) => (error.response?.status === 502 ? false : true),
+      retry: (count, error) =>
+        error.response?.status === 502 ||
+        error.response?.status === 429 ||
+        count >= 5
+          ? false
+          : true,
     }
   );
 };

@@ -15,7 +15,7 @@ export const ForceStopSearchData: React.FC<IForceStopSearchProps> = ({
 }) => {
   const [selectedDates, setSelectedDates] = useState<Date[]>(
     stopSearchDates
-      .sort((x, y) => y.getTime() - x.getTime())
+      .sort((x, y) => x.getTime() - y.getTime())
       .filter((x, index) => index < 3)
   );
   const {
@@ -31,17 +31,11 @@ export const ForceStopSearchData: React.FC<IForceStopSearchProps> = ({
           container
           justifyContent="center"
           alignItems="center"
-          padding={1}
+          padding={3}
           spacing={1}
         >
-          <Grid item>
-            <StopSearchChart
-              searches={
-                Array.isArray(stopSearchData)
-                  ? stopSearchData
-                  : [stopSearchData]
-              }
-            />
+          <Grid item width="100%" minHeight="60vh">
+            <StopSearchChart searches={stopSearchData} />
           </Grid>
         </Grid>
       ) : (
