@@ -4,35 +4,32 @@ import ReactApexChart from "react-apexcharts";
 interface IStopSearchChartProps {
   searches: IPersonSearch[][];
 }
-const findUniqueDates = (personSearchData: IPersonSearch[]) => {
-  const uniqueDates = new Set<string>();
+const findUniqueRaces = (personSearchData: IPersonSearch[]): string[] => {
+  const uniqueRaces: string[] = [];
 
   personSearchData.forEach((person) => {
-    const date = new Date(person.datetime);
-    const dateString = date.toISOString().split("T")[0];
-    uniqueDates.add(dateString);
+    if (!uniqueRaces.includes(person.self_defined_ethnicity)) {
+      uniqueRaces.push(person.self_defined_ethnicity);
+    }
   });
 
-  return Array.from(uniqueDates);
-};
-const findUniqueRaces = (personSearchData: IPersonSearch[]) => {
-  const uniqueRaces = new Set();
-
-  personSearchData.forEach((person) => {
-    uniqueRaces.add(person.self_defined_ethnicity);
-  });
-
-  return Array.from(uniqueRaces);
+  return uniqueRaces.filter((x) => x);
 };
 export const StopSearchChart: React.FC<IStopSearchChartProps> = ({
   searches,
 }) => {
+  const categories = searches.map((x) => {
+    const date = new Date(x[0].datetime);
+    return `${date.getMonth() + 1}/${date.getFullYear()}`;
+  });
+  const uniqueRaces = findUniqueRaces(searches.flat());
   const chartSeries: ApexAxisChartSeries | ApexNonAxisChartSeries =
-    searches.map((x, index, array) => {
-      const date = new Date(x[0].datetime);
+    uniqueRaces.map((x: string) => {
       return {
-        name: `${date.getMonth() + 1}/${date.getFullYear()}`,
-        data: [x.length],
+        name: x,
+        data: searches.map(
+          (y) => y.filter((deepX) => deepX.self_defined_ethnicity === x).length
+        ),
         color: generateBrightRandomColor(),
       };
     });
@@ -42,19 +39,18 @@ export const StopSearchChart: React.FC<IStopSearchChartProps> = ({
       height: 350,
       type: "bar",
       animations: {
-        enabled: false,
+        enabled: true,
       },
-
       zoom: {
-        enabled: false,
+        enabled: true,
       },
       toolbar: {
         show: true,
       },
     },
     legend: {
-      fontSize: "25px",
-      show: false,
+      fontSize: "12px",
+      show: true,
       position: "bottom",
     },
     title: {
@@ -72,7 +68,7 @@ export const StopSearchChart: React.FC<IStopSearchChartProps> = ({
       },
     },
     dataLabels: {
-      enabled: true,
+      enabled: false,
       offsetY: -20,
       style: {
         fontSize: "30px",
@@ -80,18 +76,19 @@ export const StopSearchChart: React.FC<IStopSearchChartProps> = ({
       },
     },
     xaxis: {
-      categories: ["Stop searches per month"],
+      categories: categories,
       labels: {
-        show: false,
+        show: true,
+        style: {
+          fontSize: "20px",
+        },
       },
     },
     yaxis: {
-      max: searches.reduce((acc, val) => {
-        if (val.length > acc) {
-          return val.length;
-        } else {
-          return acc;
-        }
+      max: chartSeries.reduce((acc, val) => {
+        const maxVal = Math.max(...val.data.map((x) => Number(x)));
+        if (maxVal > acc) return maxVal;
+        else return acc;
       }, 0),
       labels: {
         show: true,

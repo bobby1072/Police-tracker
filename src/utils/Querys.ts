@@ -29,7 +29,12 @@ export const useForceCrimeInfoAndOfficers = (force: IAllForce) => {
         ApiServiceProvider.ForceOfficers(force),
       ]),
     {
-      retry: (failureCount, error) => failureCount >= 5,
+      retry: (count, error) =>
+        error.response?.status === 502 ||
+        error.response?.status === 429 ||
+        count >= 5
+          ? false
+          : true,
     }
   );
 };
@@ -57,7 +62,12 @@ export const useStopSearchAvailability = () => {
     Constants.QueryKeys.getStopSearchAvailability,
     () => ApiServiceProvider.ForceStopSearchAvailability(),
     {
-      retry: () => false,
+      retry: (count, error) =>
+        error.response?.status === 502 ||
+        error.response?.status === 429 ||
+        count >= 5
+          ? false
+          : true,
     }
   );
 };

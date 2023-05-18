@@ -34,7 +34,7 @@ export const ForceStopSearchData: React.FC<IForceStopSearchProps> = ({
           padding={3}
           spacing={1}
         >
-          <Grid item width="100%" minHeight="60vh">
+          <Grid item width="100%" minHeight="80vh">
             <StopSearchChart searches={stopSearchData} />
           </Grid>
         </Grid>
