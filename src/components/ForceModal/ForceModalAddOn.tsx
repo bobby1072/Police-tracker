@@ -182,8 +182,8 @@ export const ModalAddonFunc: React.FC<IModalAddOnFuncProps> = ({
                 Stop search data
               </Typography>
             </AccordionSummary>
-            <Divider />
-            <AccordionDetails>
+            <Divider sx={{ mb: 1 }} />
+            <AccordionDetails sx={{ padding: 1 }}>
               {accordionData.stopSearch && (
                 <ForceStopSearchData
                   force={force}

@@ -1,4 +1,13 @@
-import { Paper, Grid } from "@mui/material";
+import {
+  Paper,
+  Grid,
+  Typography,
+  Divider,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+} from "@mui/material";
 import { useState } from "react";
 import IAllForce from "../../common/ApiTypes/IAllForces";
 import { Loading } from "../../common/Loading";
@@ -23,7 +32,9 @@ export const ForceStopSearchData: React.FC<IForceStopSearchProps> = ({
     isLoading: stopSearchLoading,
     error: stopSearchError,
   } = useForceStopAndSearch(force, selectedDates);
-
+  const [filterOption, setFilterOption] = useState<
+    "all" | "age" | "race" | "law" | "gender"
+  >("all");
   return (
     <Paper>
       {stopSearchData && !stopSearchLoading && !stopSearchError ? (
@@ -34,8 +45,52 @@ export const ForceStopSearchData: React.FC<IForceStopSearchProps> = ({
           padding={3}
           spacing={1}
         >
+          <Grid item width="100%">
+            <Grid
+              container
+              direction="row"
+              justifyContent="center"
+              alignItems="center"
+              padding={1}
+              spacing={2}
+            >
+              <Grid item width="20%">
+                <FormControl fullWidth>
+                  <InputLabel id="demo-simple-select-label">
+                    Category Filter
+                  </InputLabel>
+                  <Select
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    label="Category Filter"
+                    value={filterOption}
+                    onChange={(event) => {
+                      setFilterOption(event.target.value as any);
+                    }}
+                  >
+                    <MenuItem value="all">All</MenuItem>
+                    <MenuItem value="gender">Gender</MenuItem>
+                    <MenuItem value="law">Legislation</MenuItem>
+                    <MenuItem value="race">Ethnicity</MenuItem>
+                    <MenuItem value="age">Age range</MenuItem>
+                  </Select>
+                </FormControl>
+              </Grid>
+            </Grid>
+          </Grid>
+          <Grid item>
+            <Typography variant="subtitle2" fontSize={12}>
+              *Last 3 months of data*
+            </Typography>
+          </Grid>
+          <Grid item width="100%">
+            <Divider />
+          </Grid>
           <Grid item width="100%" minHeight="80vh">
-            <StopSearchChart searches={stopSearchData} />
+            <StopSearchChart
+              searches={stopSearchData}
+              categoryFilter={filterOption}
+            />
           </Grid>
         </Grid>
       ) : (

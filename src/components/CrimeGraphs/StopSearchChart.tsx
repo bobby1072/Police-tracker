@@ -3,32 +3,106 @@ import { generateBrightRandomColor } from "./CrimeBarChart";
 import ReactApexChart from "react-apexcharts";
 interface IStopSearchChartProps {
   searches: IPersonSearch[][];
+  categoryFilter: "all" | "age" | "race" | "law" | "gender";
 }
-const findUniqueRaces = (personSearchData: IPersonSearch[]): string[] => {
-  const uniqueRaces: string[] = [];
+const findUniqueRace = (personSearchData: IPersonSearch[]): string[] => {
+  const uniqueCat: string[] = [];
 
   personSearchData.forEach((person) => {
-    if (!uniqueRaces.includes(person.self_defined_ethnicity)) {
-      uniqueRaces.push(person.self_defined_ethnicity);
+    if (!uniqueCat.includes(person.self_defined_ethnicity)) {
+      uniqueCat.push(person.self_defined_ethnicity);
     }
   });
 
-  return uniqueRaces.filter((x) => x);
+  return uniqueCat.filter((x) => Boolean(x));
+};
+const findUniqueAgeRanges = (personSearchData: IPersonSearch[]): string[] => {
+  const uniqueAgeRanges: string[] = [];
+
+  personSearchData.forEach((person) => {
+    if (
+      person.age_range &&
+      !uniqueAgeRanges.includes(person.age_range) &&
+      person.age_range !== null
+    ) {
+      uniqueAgeRanges.push(person.age_range);
+    }
+  });
+
+  return uniqueAgeRanges.filter((x) => Boolean(x));
+};
+const findUniqueGenders = (personSearchData: IPersonSearch[]): string[] => {
+  const uniqueGenders: string[] = [];
+
+  personSearchData.forEach((person) => {
+    if (!uniqueGenders.includes(person.gender)) {
+      uniqueGenders.push(person.gender);
+    }
+  });
+
+  return uniqueGenders.filter((x) => Boolean(x));
+};
+const findUniqueLegislations = (
+  personSearchData: IPersonSearch[]
+): string[] => {
+  const uniqueLegislations: string[] = [];
+
+  personSearchData.forEach((person) => {
+    if (!uniqueLegislations.includes(person.legislation)) {
+      uniqueLegislations.push(person.legislation);
+    }
+  });
+
+  return uniqueLegislations.filter((x) => Boolean(x));
 };
 export const StopSearchChart: React.FC<IStopSearchChartProps> = ({
   searches,
+  categoryFilter,
 }) => {
   const categories = searches.map((x) => {
     const date = new Date(x[0].datetime);
     return `${date.getMonth() + 1}/${date.getFullYear()}`;
   });
-  const uniqueRaces = findUniqueRaces(searches.flat());
+  let uniqueCat: string[];
+  let propertyName: string;
+  switch (categoryFilter) {
+    case "all":
+      propertyName = "all";
+      uniqueCat = ["all searches"];
+      break;
+    case "age":
+      propertyName = "age_range";
+      uniqueCat = findUniqueAgeRanges(searches.flat());
+      break;
+    case "gender":
+      propertyName = "gender";
+      uniqueCat = findUniqueGenders(searches.flat());
+      break;
+    case "race":
+      propertyName = "self_defined_ethnicity";
+      uniqueCat = findUniqueRace(searches.flat());
+      break;
+    case "law":
+      propertyName = "legislation";
+      uniqueCat = findUniqueLegislations(searches.flat());
+      break;
+    default:
+      uniqueCat = ["all searches"];
+      break;
+  }
   const chartSeries: ApexAxisChartSeries | ApexNonAxisChartSeries =
-    uniqueRaces.map((x: string) => {
+    uniqueCat.map((x: string) => {
       return {
         name: x,
-        data: searches.map(
-          (y) => y.filter((deepX) => deepX.self_defined_ethnicity === x).length
+        data: searches.map((y) =>
+          propertyName === "all"
+            ? y.length
+            : y.filter(
+                (deepX) =>
+                  Object.entries(deepX).find(
+                    ([key, val]) => key === propertyName
+                  )![1] === x
+              ).length
         ),
         color: generateBrightRandomColor(),
       };
