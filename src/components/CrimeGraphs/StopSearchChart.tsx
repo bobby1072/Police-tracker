@@ -65,26 +65,27 @@ export const StopSearchChart: React.FC<IStopSearchChartProps> = ({
   });
   let uniqueCat: string[];
   let propertyName: string;
+  const flatSearch = searches.flat();
   switch (categoryFilter) {
     case "all":
       propertyName = "all";
-      uniqueCat = ["all searches"];
+      uniqueCat = ["All searches"];
       break;
     case "age":
       propertyName = "age_range";
-      uniqueCat = findUniqueAgeRanges(searches.flat());
+      uniqueCat = findUniqueAgeRanges(flatSearch);
       break;
     case "gender":
       propertyName = "gender";
-      uniqueCat = findUniqueGenders(searches.flat());
+      uniqueCat = findUniqueGenders(flatSearch);
       break;
     case "race":
       propertyName = "self_defined_ethnicity";
-      uniqueCat = findUniqueRace(searches.flat());
+      uniqueCat = findUniqueRace(flatSearch);
       break;
     case "law":
       propertyName = "legislation";
-      uniqueCat = findUniqueLegislations(searches.flat());
+      uniqueCat = findUniqueLegislations(flatSearch);
       break;
     default:
       uniqueCat = ["all searches"];
