@@ -8,7 +8,8 @@ import ICrimeStreetDates from "../common/ApiTypes/ICrimeStreetDates";
 import IPersonSearch from "../common/ApiTypes/IPersonSearch";
 export default abstract class ApiServiceProvider {
   private static _httpClient = axios.create({
-    baseURL: "https://data.police.uk/api",
+    baseURL:
+      process.env.NODE_ENV === "test" ? "" : "https://data.police.uk/api",
   });
   private static _fixDate(date: Date): string {
     const year = date.getFullYear();

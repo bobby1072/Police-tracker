@@ -8,13 +8,31 @@ import { AxiosError } from "axios";
 import ICrimeStreetDates from "../common/ApiTypes/ICrimeStreetDates";
 import Constants from "../common/Constants";
 import IPersonSearch from "../common/ApiTypes/IPersonSearch";
-
+const generalRetryFunc = (count: number, error: AxiosError<unknown, any>) =>
+  Number(error.response?.status) >= 500 ||
+  error.response?.status === 429 ||
+  count >= 5
+    ? false
+    : true;
 export const useAllForces = () => {
   return useQuery<IAllForce[], AxiosError>(
     Constants.QueryKeys.getAllForces,
     () => ApiServiceProvider.GetAllForces(),
     {
-      retry: (failureCount, error) => failureCount >= 5,
+      retry: generalRetryFunc,
+      onSuccess: (data) => {
+        return data.sort((a, b) => {
+          const nameA = a.name.toLowerCase();
+          const nameB = b.name.toLowerCase();
+          if (nameA < nameB) {
+            return -1;
+          }
+          if (nameA > nameB) {
+            return 1;
+          }
+          return 0;
+        });
+      },
     }
   );
 };
@@ -29,12 +47,7 @@ export const useForceCrimeInfoAndOfficers = (force: IAllForce) => {
         ApiServiceProvider.ForceOfficers(force),
       ]),
     {
-      retry: (count, error) =>
-        error.response?.status === 502 ||
-        error.response?.status === 429 ||
-        count >= 5
-          ? false
-          : true,
+      retry: generalRetryFunc,
     }
   );
 };
@@ -47,12 +60,7 @@ export const useForceStopAndSearch = (force: IAllForce, dates: Date[]) => {
         dates.map((x) => ApiServiceProvider.ForceStopSearches(force, x))
       ),
     {
-      retry: (count, error) =>
-        error.response?.status === 502 ||
-        error.response?.status === 429 ||
-        count >= 5
-          ? false
-          : true,
+      retry: generalRetryFunc,
     }
   );
 };
@@ -62,12 +70,7 @@ export const useStopSearchAvailability = () => {
     Constants.QueryKeys.getStopSearchAvailability,
     () => ApiServiceProvider.ForceStopSearchAvailability(),
     {
-      retry: (count, error) =>
-        error.response?.status === 502 ||
-        error.response?.status === 429 ||
-        count >= 5
-          ? false
-          : true,
+      retry: generalRetryFunc,
     }
   );
 };

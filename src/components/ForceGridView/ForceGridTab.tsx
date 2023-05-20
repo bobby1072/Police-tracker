@@ -35,6 +35,7 @@ export const ForceGridTab: React.FC<IForceGridTabProps> = ({
         </Grid>
         <Grid item>
           <Button
+            aria-label={`${force.id}-button`}
             variant="contained"
             sx={{ backgroundColor: "#ffffff" }}
             onClick={() => {

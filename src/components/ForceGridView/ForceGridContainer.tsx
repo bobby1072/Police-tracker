@@ -61,7 +61,12 @@ export const ForceGridContainer: React.FC<IForceGridContainerProps> = ({
     });
   }, [searchVal, forces]);
   return (
-    <Grid container direction="column" spacing={1}>
+    <Grid
+      container
+      direction="column"
+      spacing={1}
+      aria-label="forceGridMainContainer"
+    >
       <Grid item width="100%">
         <Grid
           container
@@ -112,6 +117,7 @@ export const ForceGridContainer: React.FC<IForceGridContainerProps> = ({
       </Grid>
       <Grid item>
         <Grid
+          aria-label="forceItemContainer"
           container
           direction="row"
           justifyContent="center"
@@ -124,7 +130,7 @@ export const ForceGridContainer: React.FC<IForceGridContainerProps> = ({
             .filter((_, index) => allowIndex(index + 1, matchRange))
             .map((x) => {
               return (
-                <Grid item width="33%">
+                <Grid item width="33%" aria-label={x.id}>
                   <ForceGridTab
                     force={x}
                     setForce={(data: IAllForce) => {
@@ -201,6 +207,7 @@ export const ForceGridContainer: React.FC<IForceGridContainerProps> = ({
           <Grid item>
             <div
               style={{ cursor: "pointer" }}
+              aria-label="next-page"
               onClick={() => {
                 setMatchRange((_) =>
                   calcMaxPages(shownForces.length, matchRange) !==
