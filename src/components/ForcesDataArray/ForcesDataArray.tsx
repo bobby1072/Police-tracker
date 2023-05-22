@@ -11,7 +11,7 @@ export const ForcesDataArray: React.FC<IForcesDataArrayProps> = (
   const { forces, setForce } = props;
   const columns: MUIDataTableColumnDef[] = Object.keys(forces[0])
     .map((x) => {
-      return { name: x, label: x };
+      return { name: x, label: x.toUpperCase() };
     })
     .reverse();
   return (

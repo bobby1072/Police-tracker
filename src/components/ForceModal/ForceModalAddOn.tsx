@@ -21,6 +21,7 @@ import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { ForceStopSearchData } from "./ForceStopSearchData";
 import IAllForce from "../../common/ApiTypes/IAllForces";
+import { Date } from "../../utils/ExtendedDate";
 interface IModalAddOnFuncProps {
   reports: [ICrimeReport[], IPoliceService, IOfficerBio[]];
   closeModal: () => void;
@@ -32,19 +33,11 @@ interface IAccordionExpanded {
   recentCrimes: boolean;
   stopSearch: boolean;
 }
-const a11yProps = (index: number) => {
+export const a11yProps = (index: number) => {
   return {
     id: `simple-tab-${index}`,
     "aria-controls": `simple-tabpanel-${index}`,
   };
-};
-export const getDate = (dateString: string) => {
-  const dateArray: string[] = dateString.split("-");
-  const year: number = parseInt(dateArray[0]);
-  const month: number = parseInt(dateArray[1]);
-  const date: Date = new Date(Date.UTC(year, month - 1));
-  const timestamp: number = Math.floor(date.getTime() / 1000);
-  return timestamp;
 };
 export const ModalAddonFunc: React.FC<IModalAddOnFuncProps> = ({
   closeModal,
@@ -58,7 +51,10 @@ export const ModalAddonFunc: React.FC<IModalAddOnFuncProps> = ({
     stopSearch: false,
   });
   const sortedCrimeReports = crimeReport.sort((a, b) => {
-    const [aTimeStamp, bTimeStamp] = [getDate(a.month), getDate(b.month)];
+    const [aTimeStamp, bTimeStamp] = [
+      Date.getNumberDate(a.month),
+      Date.getNumberDate(b.month),
+    ];
     return aTimeStamp - bTimeStamp;
   });
   const [crimeDisplay, setCrimeDisplay] = useState<number>(0);

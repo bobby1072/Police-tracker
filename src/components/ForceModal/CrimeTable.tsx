@@ -1,7 +1,7 @@
 import { Grid, TableCell, TableRow, Typography } from "@mui/material";
 import MUIDataTable from "mui-datatables";
 import ICrimeReport from "../../common/ApiTypes/ICrimeReport";
-import { getDate } from "./ForceModalAddOn";
+import { Date } from "../../utils/ExtendedDate";
 interface ICrimeTableProps {
   sortedCrimeReports: ICrimeReport[];
 }
@@ -13,15 +13,15 @@ export const CrimeTable: React.FC<ICrimeTableProps> = ({
       columns={Object.keys(sortedCrimeReports[0]).map((x) => {
         return {
           name: x,
-          label: x,
+          label: x.toUpperCase(),
           ...(!(x === "category" || x === "id") && {
             options: {
               display: x === "month" ? "true" : "excluded",
               ...(x === "month" && {
                 sortCompare: (order: string) => (a: any, b: any) => {
                   const [aTimeStamp, bTimeStamp] = [
-                    getDate(a.data),
-                    getDate(b.data),
+                    Date.getNumberDate(a.data),
+                    Date.getNumberDate(b.data),
                   ];
                   if (order === "asc") {
                     return aTimeStamp - bTimeStamp;

@@ -11,6 +11,8 @@ import {
   TextField,
   Chip,
   IconButton,
+  Tab,
+  Tabs,
 } from "@mui/material";
 import ClearIcon from "@mui/icons-material/Clear";
 import { Fragment, useEffect, useState } from "react";
@@ -19,6 +21,8 @@ import { Loading } from "../../common/Loading";
 import { Error } from "../../common/Error";
 import { useForceStopAndSearch } from "../../utils/Querys";
 import { StopSearchChart } from "../CrimeGraphs/StopSearchChart";
+import { a11yProps } from "./ForceModalAddOn";
+import { StopSearchDataTable } from "./StopSearchDataTable";
 interface IForceStopSearchProps {
   stopSearchDates: Date[];
   force: IAllForce;
@@ -36,9 +40,7 @@ export const ForceStopSearchData: React.FC<IForceStopSearchProps> = ({
     (x, y) => y.getTime() - x.getTime()
   );
   const [selectedDates, setSelectedDates] = useState<Date[]>(
-    sortedStopSearch
-      .filter((x, index) => index < 3)
-      .sort((x, y) => x.getTime() - y.getTime())
+    sortedStopSearch.filter((x, index) => index < 5)
   );
   const {
     data: stopSearchData,
@@ -52,6 +54,7 @@ export const ForceStopSearchData: React.FC<IForceStopSearchProps> = ({
   useEffect(() => {
     stopSearchRefetch();
   }, [selectedDates, stopSearchRefetch]);
+  const [displayType, setDisplayType] = useState<number>(0);
   return (
     <Paper>
       {stopSearchData && !stopSearchLoading && !stopSearchError ? (
@@ -71,28 +74,30 @@ export const ForceStopSearchData: React.FC<IForceStopSearchProps> = ({
               padding={1}
               spacing={2}
             >
-              <Grid item width="20%">
-                <FormControl fullWidth>
-                  <InputLabel id="demo-simple-select-label">
-                    Category Filter
-                  </InputLabel>
-                  <Select
-                    labelId="demo-simple-select-label"
-                    id="demo-simple-select"
-                    label="Category Filter"
-                    value={filterOption}
-                    onChange={(event) => {
-                      setFilterOption(event.target.value as any);
-                    }}
-                  >
-                    <MenuItem value="all">All</MenuItem>
-                    <MenuItem value="gender">Gender</MenuItem>
-                    <MenuItem value="law">Legislation</MenuItem>
-                    <MenuItem value="race">Ethnicity</MenuItem>
-                    <MenuItem value="age">Age range</MenuItem>
-                  </Select>
-                </FormControl>
-              </Grid>
+              {displayType === 0 && (
+                <Grid item width="20%">
+                  <FormControl fullWidth>
+                    <InputLabel id="demo-simple-select-label">
+                      Category Filter
+                    </InputLabel>
+                    <Select
+                      labelId="demo-simple-select-label"
+                      id="demo-simple-select"
+                      label="Category Filter"
+                      value={filterOption}
+                      onChange={(event) => {
+                        setFilterOption(event.target.value as any);
+                      }}
+                    >
+                      <MenuItem value="all">All</MenuItem>
+                      <MenuItem value="gender">Gender</MenuItem>
+                      <MenuItem value="law">Legislation</MenuItem>
+                      <MenuItem value="race">Ethnicity</MenuItem>
+                      <MenuItem value="age">Age range</MenuItem>
+                    </Select>
+                  </FormControl>
+                </Grid>
+              )}
               <Grid item width="60%">
                 <Paper>
                   <Autocomplete
@@ -166,10 +171,33 @@ export const ForceStopSearchData: React.FC<IForceStopSearchProps> = ({
             <Divider />
           </Grid>
           <Grid item width="100%" minHeight="80vh">
-            <StopSearchChart
-              searches={stopSearchData}
-              categoryFilter={filterOption}
-            />
+            <Paper>
+              <Tabs
+                value={displayType}
+                onChange={(event: React.SyntheticEvent, newValue: number) => {
+                  setDisplayType(newValue);
+                }}
+                aria-label="basic tabs example"
+                sx={{ mb: 2 }}
+              >
+                <Tab label="Stop search chart" {...a11yProps(0)} />
+                <Tab label="Data table" {...a11yProps(1)} />
+              </Tabs>
+              <Divider />
+              {displayType === 0 ? (
+                <div style={{ minHeight: "75vh" }}>
+                  <StopSearchChart
+                    searches={stopSearchData}
+                    categoryFilter={filterOption}
+                  />
+                </div>
+              ) : (
+                <StopSearchDataTable
+                  searchData={stopSearchData}
+                  categoryFilter={filterOption}
+                />
+              )}
+            </Paper>
           </Grid>
         </Grid>
       ) : (
