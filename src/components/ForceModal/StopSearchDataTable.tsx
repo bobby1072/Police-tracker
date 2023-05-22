@@ -3,12 +3,16 @@ import IPersonSearch from "../../common/ApiTypes/IPersonSearch";
 import { Date } from "../../utils/ExtendedDate";
 
 interface IStopSearchDataTableProps {
-  searchData: IPersonSearch[][];
-  categoryFilter: "all" | "age" | "race" | "law" | "gender";
+  searchData?: IPersonSearch[][];
+  disabled?: boolean;
 }
 export const StopSearchDataTable: React.FC<IStopSearchDataTableProps> = ({
   searchData,
+  disabled,
 }) => {
+  if (disabled || !searchData) {
+    return null;
+  }
   const flatData = searchData.flat();
   return (
     <MUIDataTable

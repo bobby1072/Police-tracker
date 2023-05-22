@@ -64,21 +64,21 @@ export const useForceCrimeInfoAndOfficers = (force: IAllForce) => {
   );
 };
 
-export const useForceStopAndSearch = (force: IAllForce, dates: Date[]) => {
-  const queryClient = useQueryClient();
+export const useForceStopAndSearch = (
+  force: IAllForce,
+  dates: Date[],
+  onSuccessFunc?: (data: IPersonSearch[][]) => void,
+  fetchedData?: IPersonSearch[][]
+) => {
   return useQuery<IPersonSearch[][], AxiosError>(
     Constants.QueryKeys.getStopSearchInfo,
     async () => {
-      const existingData =
-        queryClient.getQueryData<IPersonSearch[][]>(
-          Constants.QueryKeys.getStopSearchInfo
-        ) || [];
-
-      const existingDates = existingData.map(
+      fetchedData = fetchedData || [];
+      const existingDates = fetchedData.map(
         (x) => new Date(fixDate(new Date(x[0].datetime)))
       );
 
-      const filteredExistingData = existingData.filter((data) => {
+      const filteredExistingData = fetchedData.filter((data) => {
         const dataDate = new Date(fixDate(new Date(data[0].datetime)));
         const dataDateOnly = new Date(
           dataDate.getFullYear(),
@@ -121,6 +121,7 @@ export const useForceStopAndSearch = (force: IAllForce, dates: Date[]) => {
     },
     {
       retry: generalRetryFunc,
+      ...(onSuccessFunc && { onSuccess: onSuccessFunc }),
     }
   );
 };

@@ -54,14 +54,14 @@ export abstract class MockDataProvider {
     }
     return reportArr;
   }
-  public static PoliceServiceMock(): IPoliceService {
+  public static PoliceServiceMock(force: IAllForce): IPoliceService {
     const policeService: IPoliceService = {
       description: faker.lorem.sentence(),
       url: faker.internet.url(),
       engagement_methods: [],
       telephone: faker.phone.number(),
-      id: faker.string.uuid(),
-      name: faker.company.name(),
+      id: force.id,
+      name: force.name,
     };
 
     const numEngagementMethods = Math.floor(this._getRandomNumber(1, 5));

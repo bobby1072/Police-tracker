@@ -22,6 +22,7 @@ import { Error } from "../../common/Error";
 import { useForceStopAndSearch } from "../../utils/Querys";
 import { StopSearchChart } from "../CrimeGraphs/StopSearchChart";
 import { a11yProps } from "./ForceModalAddOn";
+import IPersonSearch from "../../common/ApiTypes/IPersonSearch";
 import { StopSearchDataTable } from "./StopSearchDataTable";
 interface IForceStopSearchProps {
   stopSearchDates: Date[];
@@ -40,24 +41,31 @@ export const ForceStopSearchData: React.FC<IForceStopSearchProps> = ({
     (x, y) => y.getTime() - x.getTime()
   );
   const [selectedDates, setSelectedDates] = useState<Date[]>(
-    sortedStopSearch.filter((x, index) => index < 5)
+    sortedStopSearch.filter((x, index) => index < 4)
   );
+  const [fetchedData, setFetchedData] = useState<IPersonSearch[][]>();
   const {
-    data: stopSearchData,
     isLoading: stopSearchLoading,
     error: stopSearchError,
     refetch: stopSearchRefetch,
-  } = useForceStopAndSearch(force, selectedDates);
+  } = useForceStopAndSearch(
+    force,
+    selectedDates,
+    (data: IPersonSearch[][]) => {
+      setFetchedData(data);
+    },
+    fetchedData
+  );
   const [filterOption, setFilterOption] = useState<
     "all" | "age" | "race" | "law" | "gender"
   >("all");
   useEffect(() => {
     stopSearchRefetch();
-  }, [selectedDates, stopSearchRefetch]);
+  }, [selectedDates, stopSearchRefetch, fetchedData]);
   const [displayType, setDisplayType] = useState<number>(0);
   return (
     <Paper>
-      {stopSearchData && !stopSearchLoading && !stopSearchError ? (
+      {fetchedData && !stopSearchLoading && !stopSearchError ? (
         <Grid
           container
           justifyContent="center"
@@ -170,7 +178,7 @@ export const ForceStopSearchData: React.FC<IForceStopSearchProps> = ({
           <Grid item width="100%">
             <Divider />
           </Grid>
-          <Grid item width="100%" minHeight="80vh">
+          <Grid item width="100%" minHeight="90vh">
             <Paper>
               <Tabs
                 value={displayType}
@@ -185,17 +193,14 @@ export const ForceStopSearchData: React.FC<IForceStopSearchProps> = ({
               </Tabs>
               <Divider />
               {displayType === 0 ? (
-                <div style={{ minHeight: "75vh" }}>
+                <div style={{ minHeight: "85vh" }}>
                   <StopSearchChart
-                    searches={stopSearchData}
+                    searches={fetchedData}
                     categoryFilter={filterOption}
                   />
                 </div>
               ) : (
-                <StopSearchDataTable
-                  searchData={stopSearchData}
-                  categoryFilter={filterOption}
-                />
+                <StopSearchDataTable searchData={fetchedData} />
               )}
             </Paper>
           </Grid>

@@ -124,7 +124,7 @@ export const StopSearchChart: React.FC<IStopSearchChartProps> = ({
       },
     },
     legend: {
-      fontSize: "12px",
+      fontSize: "15px",
       show: true,
       position: "bottom",
     },
