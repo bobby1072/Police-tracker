@@ -226,12 +226,12 @@ export const ModalAddonFunc: React.FC<IModalAddOnFuncProps> = ({
                     aria-label="basic tabs example"
                     sx={{ mb: 2 }}
                   >
-                    <Tab label="Data table" {...a11yProps(0)} />
-                    <Tab label="Pie chart" {...a11yProps(1)} />
+                    <Tab label="Pie chart" {...a11yProps(0)} />
+                    <Tab label="Data table" {...a11yProps(1)} />
                   </Tabs>
                   <Divider />
                   <div style={{ padding: 7 }}>
-                    {crimeDisplay !== 0 ? (
+                    {crimeDisplay === 0 ? (
                       <CrimeBarChart crimes={crimeReport} />
                     ) : (
                       <CrimeTable sortedCrimeReports={sortedCrimeReports} />
