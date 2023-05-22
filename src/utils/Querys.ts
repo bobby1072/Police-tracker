@@ -1,4 +1,4 @@
-import { useQuery } from "react-query";
+import { useQuery, useQueryClient } from "react-query";
 import IAllForce from "../common/ApiTypes/IAllForces";
 import ICrimeReport from "../common/ApiTypes/ICrimeReport";
 import IPoliceService from "../common/ApiTypes/IPoliceService";
@@ -8,12 +8,14 @@ import { AxiosError } from "axios";
 import ICrimeStreetDates from "../common/ApiTypes/ICrimeStreetDates";
 import Constants from "../common/Constants";
 import IPersonSearch from "../common/ApiTypes/IPersonSearch";
+import { fixDate } from "../components/ForceModal/ForceStopSearchData";
 const generalRetryFunc = (count: number, error: AxiosError<unknown, any>) =>
   Number(error.response?.status) >= 500 ||
   error.response?.status === 429 ||
   count >= 5
     ? false
     : true;
+
 export const useAllForces = () => {
   return useQuery<IAllForce[], AxiosError>(
     Constants.QueryKeys.getAllForces,
@@ -53,12 +55,40 @@ export const useForceCrimeInfoAndOfficers = (force: IAllForce) => {
 };
 
 export const useForceStopAndSearch = (force: IAllForce, dates: Date[]) => {
+  const queryClient = useQueryClient();
   return useQuery<IPersonSearch[][], AxiosError>(
     Constants.QueryKeys.getStopSearchInfo,
-    () =>
-      Promise.all(
-        dates.map((x) => ApiServiceProvider.ForceStopSearches(force, x))
-      ),
+    async () => {
+      const existingData =
+        queryClient.getQueryData<IPersonSearch[][]>(
+          Constants.QueryKeys.getStopSearchInfo
+        ) || [];
+      const existingDates = existingData.map(
+        (x) => new Date(fixDate(new Date(x[0].datetime)))
+      );
+      const filteredDatesArray = dates.filter((x) => {
+        const check = !existingDates.some((deepX) => {
+          const deepXDate = new Date(
+            deepX.getFullYear(),
+            deepX.getMonth(),
+            deepX.getDate()
+          );
+          const xDate = new Date(x.getFullYear(), x.getMonth(), x.getDate());
+          return deepXDate.getTime() === xDate.getTime();
+        });
+        return check;
+      });
+      const newData =
+        filteredDatesArray.length >= 1
+          ? await Promise.all(
+              filteredDatesArray.map((x) =>
+                ApiServiceProvider.ForceStopSearches(force, x)
+              )
+            )
+          : [];
+
+      return [...existingData, ...newData];
+    },
     {
       retry: generalRetryFunc,
     }

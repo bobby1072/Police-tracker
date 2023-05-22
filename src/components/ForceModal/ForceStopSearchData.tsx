@@ -13,22 +13,31 @@ import {
   IconButton,
 } from "@mui/material";
 import ClearIcon from "@mui/icons-material/Clear";
-
 import { Fragment, useEffect, useState } from "react";
 import IAllForce from "../../common/ApiTypes/IAllForces";
 import { Loading } from "../../common/Loading";
 import { Error } from "../../common/Error";
 import { useForceStopAndSearch } from "../../utils/Querys";
 import { StopSearchChart } from "../CrimeGraphs/StopSearchChart";
-import { useQueryClient } from "react-query";
 interface IForceStopSearchProps {
   stopSearchDates: Date[];
   force: IAllForce;
 }
-const fixDate = (date: Date): string => {
+export const fixDate = (date: Date): string => {
   const year = date.getFullYear();
   const month = date.getMonth() + 1;
   return `${year}-${month}`;
+};
+const getUniqueDates = (dates: Date[]): Date[] => {
+  const uniqueDates: Date[] = [];
+
+  dates.forEach((date) => {
+    if (!uniqueDates.some((d) => d.getTime() === date.getTime())) {
+      uniqueDates.push(date);
+    }
+  });
+
+  return uniqueDates;
 };
 export const ForceStopSearchData: React.FC<IForceStopSearchProps> = ({
   stopSearchDates,
@@ -42,7 +51,6 @@ export const ForceStopSearchData: React.FC<IForceStopSearchProps> = ({
       .filter((x, index) => index < 3)
       .sort((x, y) => x.getTime() - y.getTime())
   );
-  const queryClient = useQueryClient();
   const {
     data: stopSearchData,
     isLoading: stopSearchLoading,
@@ -54,7 +62,7 @@ export const ForceStopSearchData: React.FC<IForceStopSearchProps> = ({
   >("all");
   useEffect(() => {
     stopSearchRefetch();
-  }, [selectedDates, queryClient, stopSearchRefetch]);
+  }, [selectedDates, stopSearchRefetch]);
   return (
     <Paper>
       {stopSearchData && !stopSearchLoading && !stopSearchError ? (
@@ -151,7 +159,7 @@ export const ForceStopSearchData: React.FC<IForceStopSearchProps> = ({
                     renderInput={(params) => (
                       <TextField
                         {...params}
-                        label="Months"
+                        label="Available months"
                         placeholder="Type to select month"
                       />
                     )}
