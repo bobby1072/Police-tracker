@@ -28,17 +28,6 @@ export const fixDate = (date: Date): string => {
   const month = date.getMonth() + 1;
   return `${year}-${month}`;
 };
-const getUniqueDates = (dates: Date[]): Date[] => {
-  const uniqueDates: Date[] = [];
-
-  dates.forEach((date) => {
-    if (!uniqueDates.some((d) => d.getTime() === date.getTime())) {
-      uniqueDates.push(date);
-    }
-  });
-
-  return uniqueDates;
-};
 export const ForceStopSearchData: React.FC<IForceStopSearchProps> = ({
   stopSearchDates,
   force,

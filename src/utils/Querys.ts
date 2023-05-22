@@ -17,9 +17,19 @@ const generalRetryFunc = (count: number, error: AxiosError<unknown, any>) =>
     : true;
 
 export const useAllForces = () => {
+  const queryClient = useQueryClient();
   return useQuery<IAllForce[], AxiosError>(
     Constants.QueryKeys.getAllForces,
-    () => ApiServiceProvider.GetAllForces(),
+    async () => {
+      const exists = queryClient.getQueryData<IAllForce[]>(
+        Constants.QueryKeys.getAllForces
+      );
+      if (exists) {
+        return exists;
+      } else {
+        return await ApiServiceProvider.GetAllForces();
+      }
+    },
     {
       retry: generalRetryFunc,
       onSuccess: (data) => {
@@ -63,9 +73,28 @@ export const useForceStopAndSearch = (force: IAllForce, dates: Date[]) => {
         queryClient.getQueryData<IPersonSearch[][]>(
           Constants.QueryKeys.getStopSearchInfo
         ) || [];
+
       const existingDates = existingData.map(
         (x) => new Date(fixDate(new Date(x[0].datetime)))
       );
+
+      const filteredExistingData = existingData.filter((data) => {
+        const dataDate = new Date(fixDate(new Date(data[0].datetime)));
+        const dataDateOnly = new Date(
+          dataDate.getFullYear(),
+          dataDate.getMonth(),
+          dataDate.getDate()
+        );
+        return dates.some((date) => {
+          const dateOnly = new Date(
+            date.getFullYear(),
+            date.getMonth(),
+            date.getDate()
+          );
+          return dataDateOnly.getTime() === dateOnly.getTime();
+        });
+      });
+
       const filteredDatesArray = dates.filter((x) => {
         const check = !existingDates.some((deepX) => {
           const deepXDate = new Date(
@@ -78,6 +107,7 @@ export const useForceStopAndSearch = (force: IAllForce, dates: Date[]) => {
         });
         return check;
       });
+
       const newData =
         filteredDatesArray.length >= 1
           ? await Promise.all(
@@ -87,7 +117,7 @@ export const useForceStopAndSearch = (force: IAllForce, dates: Date[]) => {
             )
           : [];
 
-      return [...existingData, ...newData];
+      return [...filteredExistingData, ...newData];
     },
     {
       retry: generalRetryFunc,
@@ -96,9 +126,19 @@ export const useForceStopAndSearch = (force: IAllForce, dates: Date[]) => {
 };
 
 export const useStopSearchAvailability = () => {
+  const queryClient = useQueryClient();
   return useQuery<ICrimeStreetDates[], AxiosError>(
     Constants.QueryKeys.getStopSearchAvailability,
-    () => ApiServiceProvider.ForceStopSearchAvailability(),
+    async () => {
+      const exists = queryClient.getQueryData<ICrimeStreetDates[]>(
+        Constants.QueryKeys.getStopSearchAvailability
+      );
+      if (exists) {
+        return exists;
+      } else {
+        return await ApiServiceProvider.ForceStopSearchAvailability();
+      }
+    },
     {
       retry: generalRetryFunc,
     }
