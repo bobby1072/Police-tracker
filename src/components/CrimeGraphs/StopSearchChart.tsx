@@ -5,58 +5,146 @@ import ReactApexChart from "react-apexcharts";
 import { ErrorComp } from "../../common/Error";
 interface IStopSearchChartProps {
   searches: IPersonSearch[][];
-  categoryFilter: "all" | "age" | "race" | "law" | "gender";
+  categoryFilter:
+    | "all"
+    | "age"
+    | "race"
+    | "law"
+    | "gender"
+    | "outcome"
+    | "officerEthnicity"
+    | "type"
+    | "operationName"
+    | "objectOfSearch";
 }
-const findUniqueRace = (personSearchData: IPersonSearch[]): string[] => {
-  const uniqueCat: string[] = [];
+abstract class PersonSearchUtils {
+  public static FindUniqueRace(personSearchData: IPersonSearch[]): string[] {
+    const uniqueRace: string[] = [];
 
-  personSearchData.forEach((person) => {
-    if (!uniqueCat.includes(person.self_defined_ethnicity)) {
-      uniqueCat.push(person.self_defined_ethnicity);
-    }
-  });
+    personSearchData.forEach((person) => {
+      if (!uniqueRace.includes(person.self_defined_ethnicity)) {
+        uniqueRace.push(person.self_defined_ethnicity);
+      }
+    });
 
-  return uniqueCat.filter((x) => Boolean(x));
-};
-const findUniqueAgeRanges = (personSearchData: IPersonSearch[]): string[] => {
-  const uniqueAgeRanges: string[] = [];
+    return uniqueRace.filter((x) => Boolean(x));
+  }
 
-  personSearchData.forEach((person) => {
-    if (
-      person.age_range &&
-      !uniqueAgeRanges.includes(person.age_range) &&
-      person.age_range !== null
-    ) {
-      uniqueAgeRanges.push(person.age_range);
-    }
-  });
+  public static FindUniqueOutcome(personSearchData: IPersonSearch[]): string[] {
+    const uniqueOutcome: string[] = [];
 
-  return uniqueAgeRanges.filter((x) => Boolean(x));
-};
-const findUniqueGenders = (personSearchData: IPersonSearch[]): string[] => {
-  const uniqueGenders: string[] = [];
+    personSearchData.forEach((person) => {
+      if (!uniqueOutcome.includes(person.outcome)) {
+        uniqueOutcome.push(person.outcome);
+      }
+    });
 
-  personSearchData.forEach((person) => {
-    if (!uniqueGenders.includes(person.gender)) {
-      uniqueGenders.push(person.gender);
-    }
-  });
+    return uniqueOutcome.filter((x) => Boolean(x));
+  }
 
-  return uniqueGenders.filter((x) => Boolean(x));
-};
-const findUniqueLegislations = (
-  personSearchData: IPersonSearch[]
-): string[] => {
-  const uniqueLegislations: string[] = [];
+  public static FindUniqueOfficerEthnicity(
+    personSearchData: IPersonSearch[]
+  ): string[] {
+    const uniqueEthnicities: string[] = [];
 
-  personSearchData.forEach((person) => {
-    if (!uniqueLegislations.includes(person.legislation)) {
-      uniqueLegislations.push(person.legislation);
-    }
-  });
+    personSearchData.forEach((person) => {
+      if (!uniqueEthnicities.includes(person.officer_defined_ethnicity)) {
+        uniqueEthnicities.push(person.officer_defined_ethnicity);
+      }
+    });
 
-  return uniqueLegislations.filter((x) => Boolean(x));
-};
+    return uniqueEthnicities.filter((x) => Boolean(x));
+  }
+
+  public static FindUniqueType(personSearchData: IPersonSearch[]): string[] {
+    const uniqueTypes: string[] = [];
+
+    personSearchData.forEach((person) => {
+      if (!uniqueTypes.includes(person.type)) {
+        uniqueTypes.push(person.type);
+      }
+    });
+
+    return uniqueTypes.filter((x) => Boolean(x));
+  }
+
+  public static FindUniqueOperationName(
+    personSearchData: IPersonSearch[]
+  ): string[] {
+    const uniqueOperationNames: string[] = [];
+
+    personSearchData.forEach((person) => {
+      if (
+        person.operation_name &&
+        !uniqueOperationNames.includes(person.operation_name) &&
+        person.operation_name !== null
+      ) {
+        uniqueOperationNames.push(person.operation_name);
+      }
+    });
+
+    return uniqueOperationNames.filter((x) => Boolean(x));
+  }
+
+  public static FindUniqueObjectOfSearch(
+    personSearchData: IPersonSearch[]
+  ): string[] {
+    const uniqueObjectsOfSearch: string[] = [];
+
+    personSearchData.forEach((person) => {
+      if (!uniqueObjectsOfSearch.includes(person.object_of_search)) {
+        uniqueObjectsOfSearch.push(person.object_of_search);
+      }
+    });
+
+    return uniqueObjectsOfSearch.filter((x) => Boolean(x));
+  }
+
+  public static FindUniqueAgeRanges(
+    personSearchData: IPersonSearch[]
+  ): string[] {
+    const uniqueAgeRanges: string[] = [];
+
+    personSearchData.forEach((person) => {
+      if (
+        person.age_range &&
+        !uniqueAgeRanges.includes(person.age_range) &&
+        person.age_range !== null
+      ) {
+        uniqueAgeRanges.push(person.age_range);
+      }
+    });
+
+    return uniqueAgeRanges.filter((x) => Boolean(x));
+  }
+
+  public static FindUniqueGenders(personSearchData: IPersonSearch[]): string[] {
+    const uniqueGenders: string[] = [];
+
+    personSearchData.forEach((person) => {
+      if (!uniqueGenders.includes(person.gender)) {
+        uniqueGenders.push(person.gender);
+      }
+    });
+
+    return uniqueGenders.filter((x) => Boolean(x));
+  }
+
+  public static FindUniqueLegislations(
+    personSearchData: IPersonSearch[]
+  ): string[] {
+    const uniqueLegislations: string[] = [];
+
+    personSearchData.forEach((person) => {
+      if (!uniqueLegislations.includes(person.legislation)) {
+        uniqueLegislations.push(person.legislation);
+      }
+    });
+
+    return uniqueLegislations.filter((x) => Boolean(x));
+  }
+}
+
 export const StopSearchChart: React.FC<IStopSearchChartProps> = ({
   searches,
   categoryFilter,
@@ -90,19 +178,35 @@ export const StopSearchChart: React.FC<IStopSearchChartProps> = ({
       break;
     case "age":
       propertyName = "age_range";
-      uniqueCat = findUniqueAgeRanges(flatSearch);
+      uniqueCat = PersonSearchUtils.FindUniqueAgeRanges(flatSearch);
       break;
     case "gender":
       propertyName = "gender";
-      uniqueCat = findUniqueGenders(flatSearch);
+      uniqueCat = PersonSearchUtils.FindUniqueGenders(flatSearch);
       break;
     case "race":
       propertyName = "self_defined_ethnicity";
-      uniqueCat = findUniqueRace(flatSearch);
+      uniqueCat = PersonSearchUtils.FindUniqueRace(flatSearch);
       break;
     case "law":
       propertyName = "legislation";
-      uniqueCat = findUniqueLegislations(flatSearch);
+      uniqueCat = PersonSearchUtils.FindUniqueLegislations(flatSearch);
+      break;
+    case "outcome":
+      propertyName = "outcome";
+      uniqueCat = PersonSearchUtils.FindUniqueOutcome(flatSearch);
+      break;
+    case "officerEthnicity":
+      propertyName = "officer_defined_ethnicity";
+      uniqueCat = PersonSearchUtils.FindUniqueOfficerEthnicity(flatSearch);
+      break;
+    case "type":
+      propertyName = "type";
+      uniqueCat = PersonSearchUtils.FindUniqueType(flatSearch);
+      break;
+    case "objectOfSearch":
+      propertyName = "object_of_search";
+      uniqueCat = PersonSearchUtils.FindUniqueObjectOfSearch(flatSearch);
       break;
     default:
       uniqueCat = ["all searches"];

@@ -43,7 +43,7 @@ export const StopSearchDataTable: React.FC<IStopSearchDataTableProps> = ({
             x === "legislation" ||
             x === "outcome" ||
             x === "involved_person") && {
-            display: "excluded",
+            display: false,
           }),
           ...(x === "datetime" && {
             sortCompare: (order) => (a, b) => {
@@ -78,10 +78,9 @@ export const StopSearchDataTable: React.FC<IStopSearchDataTableProps> = ({
           self_defined_ethnicity,
           type,
         }) => {
-          const newDatetime = new Date(datetime).getPrettyDate();
           return {
             age_range,
-            datetime: newDatetime,
+            datetime: new Date(datetime).getPrettyDate(),
             gender,
             officer_defined_ethnicity,
             operation,

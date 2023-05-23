@@ -57,7 +57,15 @@ export const ForceStopSearchData: React.FC<IForceStopSearchProps> = ({
     fetchedData
   );
   const [filterOption, setFilterOption] = useState<
-    "all" | "age" | "race" | "law" | "gender"
+    | "all"
+    | "age"
+    | "race"
+    | "law"
+    | "gender"
+    | "outcome"
+    | "officerEthnicity"
+    | "type"
+    | "objectOfSearch"
   >("all");
   useEffect(() => {
     stopSearchRefetch();
@@ -98,10 +106,16 @@ export const ForceStopSearchData: React.FC<IForceStopSearchProps> = ({
                       }}
                     >
                       <MenuItem value="all">All</MenuItem>
+                      <MenuItem value="age">Age range</MenuItem>
+                      <MenuItem value="race">Ethnicity</MenuItem>
                       <MenuItem value="gender">Gender</MenuItem>
                       <MenuItem value="law">Legislation</MenuItem>
-                      <MenuItem value="race">Ethnicity</MenuItem>
-                      <MenuItem value="age">Age range</MenuItem>
+                      <MenuItem value="officerEthnicity">
+                        Officer ethnicity
+                      </MenuItem>
+                      <MenuItem value="outcome">Outcome</MenuItem>
+                      <MenuItem value="type">Type</MenuItem>
+                      <MenuItem value="type">Object of search</MenuItem>
                     </Select>
                   </FormControl>
                 </Grid>
