@@ -8,6 +8,13 @@ export abstract class MockDataProvider {
     const random = Math.random();
     return random * (max - min) + min;
   }
+  public static SingleForceMock(): IAllForce {
+    const singleForce = `${faker.location.county()} ${faker.company.buzzNoun()}`;
+    return {
+      id: singleForce.replaceAll(" ", "").toLowerCase(),
+      name: singleForce,
+    };
+  }
   public static AllForceMock(): IAllForce[] {
     const forArr: IAllForce[] = [];
     for (let i = 0; i < Math.floor(this._getRandomNumber(10, 60)); i++) {
@@ -19,7 +26,7 @@ export abstract class MockDataProvider {
     }
     return forArr;
   }
-  public static OfficerBioMock(): IOfficerBio[] {
+  public static async OfficerBioMock(): Promise<IOfficerBio[]> {
     const forArr: IOfficerBio[] = [];
     for (let i = 0; i < Math.floor(this._getRandomNumber(10, 60)); i++) {
       forArr.push({
@@ -30,7 +37,7 @@ export abstract class MockDataProvider {
     }
     return forArr;
   }
-  public static CrimeReportMock(): ICrimeReport[] {
+  public static async CrimeReportMock(): Promise<ICrimeReport[]> {
     const reportArr: ICrimeReport[] = [];
     for (let i = 0; i < Math.floor(this._getRandomNumber(10, 60)); i++) {
       const crimeReport: ICrimeReport = {
@@ -54,7 +61,9 @@ export abstract class MockDataProvider {
     }
     return reportArr;
   }
-  public static PoliceServiceMock(force: IAllForce): IPoliceService {
+  public static async PoliceServiceMock(
+    force: IAllForce
+  ): Promise<IPoliceService> {
     const policeService: IPoliceService = {
       description: faker.lorem.sentence(),
       url: faker.internet.url(),

@@ -1,6 +1,8 @@
+import { Grid } from "@mui/material";
 import IPersonSearch from "../../common/ApiTypes/IPersonSearch";
 import { generateBrightRandomColor } from "./CrimeBarChart";
 import ReactApexChart from "react-apexcharts";
+import { ErrorComp } from "../../common/Error";
 interface IStopSearchChartProps {
   searches: IPersonSearch[][];
   categoryFilter: "all" | "age" | "race" | "law" | "gender";
@@ -59,6 +61,21 @@ export const StopSearchChart: React.FC<IStopSearchChartProps> = ({
   searches,
   categoryFilter,
 }) => {
+  if (searches.length < 1) {
+    return (
+      <Grid
+        container
+        justifyContent="center"
+        alignItems="center"
+        textAlign="center"
+        padding={5}
+      >
+        <Grid item>
+          <ErrorComp error={new Error("No selected dates")} />
+        </Grid>
+      </Grid>
+    );
+  }
   const categories = searches.map((x) => {
     const date = new Date(x[0].datetime);
     return `${date.getMonth() + 1}/${date.getFullYear()}`;

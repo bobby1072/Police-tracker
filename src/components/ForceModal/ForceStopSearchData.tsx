@@ -18,12 +18,12 @@ import ClearIcon from "@mui/icons-material/Clear";
 import { Fragment, useEffect, useState } from "react";
 import IAllForce from "../../common/ApiTypes/IAllForces";
 import { Loading } from "../../common/Loading";
-import { Error } from "../../common/Error";
 import { useForceStopAndSearch } from "../../utils/Querys";
 import { StopSearchChart } from "../CrimeGraphs/StopSearchChart";
 import { a11yProps } from "./ForceModalAddOn";
 import IPersonSearch from "../../common/ApiTypes/IPersonSearch";
 import { StopSearchDataTable } from "./StopSearchDataTable";
+import { ErrorComp } from "../../common/Error";
 interface IForceStopSearchProps {
   stopSearchDates: Date[];
   force: IAllForce;
@@ -178,7 +178,11 @@ export const ForceStopSearchData: React.FC<IForceStopSearchProps> = ({
           <Grid item width="100%">
             <Divider />
           </Grid>
-          <Grid item width="100%" minHeight="90vh">
+          <Grid
+            item
+            width="100%"
+            minHeight={fetchedData.length >= 1 ? "90vh" : undefined}
+          >
             <Paper>
               <Tabs
                 value={displayType}
@@ -193,7 +197,11 @@ export const ForceStopSearchData: React.FC<IForceStopSearchProps> = ({
               </Tabs>
               <Divider />
               {displayType === 0 ? (
-                <div style={{ minHeight: "85vh" }}>
+                <div
+                  style={{
+                    minHeight: fetchedData.length >= 1 ? "85vh" : undefined,
+                  }}
+                >
                   <StopSearchChart
                     searches={fetchedData}
                     categoryFilter={filterOption}
@@ -214,7 +222,7 @@ export const ForceStopSearchData: React.FC<IForceStopSearchProps> = ({
           )}
           {stopSearchError && (
             <Grid item>
-              <Error error={stopSearchError} />
+              <ErrorComp error={stopSearchError} />
             </Grid>
           )}
         </Grid>

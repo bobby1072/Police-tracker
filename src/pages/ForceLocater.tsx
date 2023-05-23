@@ -7,10 +7,10 @@ import { ForceModal } from "../components/ForceModal/ForceModal";
 import { useAllForces, useStopSearchAvailability } from "../utils/Querys";
 import { ForceGridContainer } from "../components/ForceGridView/ForceGridContainer";
 import { Loading } from "../common/Loading";
-import { Error } from "../common/Error";
 import { useQueryClient } from "react-query";
 import Constants from "../common/Constants";
 import { Date } from "../utils/ExtendedDate";
+import { ErrorComp } from "../common/Error";
 const a11yProps = (index: number) => {
   return {
     id: `simple-tab-${index}`,
@@ -99,7 +99,7 @@ export const ForceLocater: React.FC = () => {
                     )}
                     {forceErrors && (
                       <Grid item>
-                        <Error error={forceErrors} />
+                        <ErrorComp error={forceErrors} />
                       </Grid>
                     )}
                   </Grid>

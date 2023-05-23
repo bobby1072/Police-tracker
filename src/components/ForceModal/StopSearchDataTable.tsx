@@ -1,17 +1,29 @@
 import MUIDataTable from "mui-datatables";
 import IPersonSearch from "../../common/ApiTypes/IPersonSearch";
 import { Date } from "../../utils/ExtendedDate";
+import { ErrorComp } from "../../common/Error";
+import { Grid } from "@mui/material";
 
 interface IStopSearchDataTableProps {
-  searchData?: IPersonSearch[][];
-  disabled?: boolean;
+  searchData: IPersonSearch[][];
 }
 export const StopSearchDataTable: React.FC<IStopSearchDataTableProps> = ({
   searchData,
-  disabled,
 }) => {
-  if (disabled || !searchData) {
-    return null;
+  if (searchData.length < 1) {
+    return (
+      <Grid
+        container
+        justifyContent="center"
+        alignItems="center"
+        textAlign="center"
+        padding={5}
+      >
+        <Grid item>
+          <ErrorComp error={new Error("No selected dates")} />
+        </Grid>
+      </Grid>
+    );
   }
   const flatData = searchData.flat();
   return (
