@@ -31,6 +31,7 @@ export const ForcesDataArray: React.FC<IForcesDataArrayProps> = (
           data={forces}
           options={{
             selectableRows: "none",
+            sortOrder: { direction: "asc", name: "name" },
             filter: false,
             onRowClick: (rowData: string[], rowMeta) => {
               setForce(

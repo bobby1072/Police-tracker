@@ -115,7 +115,9 @@ export const ForceStopSearchData: React.FC<IForceStopSearchProps> = ({
                       </MenuItem>
                       <MenuItem value="outcome">Outcome</MenuItem>
                       <MenuItem value="type">Type</MenuItem>
-                      <MenuItem value="type">Object of search</MenuItem>
+                      <MenuItem value="objectOfSearch">
+                        Object of search
+                      </MenuItem>
                     </Select>
                   </FormControl>
                 </Grid>
@@ -170,6 +172,12 @@ export const ForceStopSearchData: React.FC<IForceStopSearchProps> = ({
                           />
                         </Fragment>
                       ))
+                    }
+                    filterOptions={(options, state) =>
+                      options.filter((date) => {
+                        const stateDate = new Date(state.inputValue);
+                        return date.getTime() !== stateDate.getTime();
+                      })
                     }
                     getOptionLabel={(option) => fixDate(option)}
                     renderInput={(params) => (

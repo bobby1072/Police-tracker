@@ -33,8 +33,13 @@ export const ForceLocater: React.FC = () => {
       queryClient.removeQueries(Constants.QueryKeys.getStopSearchInfo);
     }
   }, [queryClient, focusForce]);
+  const foundStopSearchAvailability = stopSearchAvailability
+    ?.filter((x) =>
+      x["stop-and-search"].find((deepX) => deepX === focusForce?.id)
+    )
+    .map((x) => new Date(x.date));
   return (
-    <div>
+    <div aria-label="forceLocaterPage">
       <MainAppBar />
       <div className="App-header">
         <div style={{ width: "90%" }}>
@@ -60,8 +65,16 @@ export const ForceLocater: React.FC = () => {
                       aria-label="basic tabs example"
                       sx={{ mb: 2 }}
                     >
-                      <Tab label="Grid view" {...a11yProps(0)} />
-                      <Tab label="Data view" {...a11yProps(1)} />
+                      <Tab
+                        aria-label="gridViewForces"
+                        label="Grid view"
+                        {...a11yProps(0)}
+                      />
+                      <Tab
+                        aria-label="dataViewForces"
+                        label="Data view"
+                        {...a11yProps(1)}
+                      />
                     </Tabs>
                     <Divider />
                     <div style={{ padding: 7 }}>
@@ -110,11 +123,12 @@ export const ForceLocater: React.FC = () => {
         </div>
         {focusForce ? (
           <ForceModal
-            stopSearchDataAvailable={stopSearchAvailability
-              ?.filter((x) =>
-                x["stop-and-search"].find((deepX) => deepX === focusForce.id)
-              )
-              .map((x) => new Date(x.date))}
+            stopSearchDataAvailable={
+              foundStopSearchAvailability &&
+              foundStopSearchAvailability.length > 0
+                ? foundStopSearchAvailability
+                : undefined
+            }
             force={focusForce}
             closeModal={() => {
               setFocusForce(undefined);

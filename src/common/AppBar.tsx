@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import {
   Box,
   Divider,
@@ -37,7 +36,6 @@ export const MainAppBar: React.FC = () => {
   const closeDraw = () => {
     setOpenMenu(false);
   };
-  const navigate = useNavigate();
   return (
     <div>
       <Box
@@ -90,7 +88,7 @@ export const MainAppBar: React.FC = () => {
             key="cpu"
             disablePadding
             onClick={() => {
-              navigate("/force");
+              window.location.href = "/force";
             }}
           >
             <ListItemButton>

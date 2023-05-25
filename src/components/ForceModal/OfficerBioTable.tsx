@@ -31,7 +31,7 @@ export const OfficerBioTable: React.FC<IOfficerBioTableProps> = ({
           name: x,
           label: x.toUpperCase(),
           ...(!(x === "name" || x === "rank") && {
-            options: { display: "excluded" },
+            options: { display: false },
           }),
         };
       })}

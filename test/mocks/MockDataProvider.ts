@@ -3,6 +3,7 @@ import IAllForce from "../../src/common/ApiTypes/IAllForces";
 import IOfficerBio from "../../src/common/ApiTypes/IOfficerBio";
 import ICrimeReport from "../../src/common/ApiTypes/ICrimeReport";
 import IPoliceService from "../../src/common/ApiTypes/IPoliceService";
+import ICrimeStreetDates from "../../src/common/ApiTypes/ICrimeStreetDates";
 export abstract class MockDataProvider {
   private static _getRandomNumber(min: number, max: number): number {
     const random = Math.random();
@@ -84,5 +85,17 @@ export abstract class MockDataProvider {
       policeService.engagement_methods.push(engagementMethod);
     }
     return policeService;
+  }
+  public static async StopSearchAvailabilityMock(): Promise<
+    ICrimeStreetDates[]
+  > {
+    const arr: ICrimeStreetDates[] = [];
+    for (let i = 0; i < faker.number.int({ min: 4, max: 20 }); i++) {
+      arr.push({
+        "stop-and-search": [""],
+        date: faker.date.anytime().toISOString(),
+      });
+    }
+    return arr;
   }
 }

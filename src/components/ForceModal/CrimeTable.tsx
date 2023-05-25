@@ -16,7 +16,7 @@ export const CrimeTable: React.FC<ICrimeTableProps> = ({
           label: x.toUpperCase(),
           ...(!(x === "category" || x === "id") && {
             options: {
-              display: x === "month" ? "true" : "excluded",
+              display: x === "month" ? true : false,
               ...(x === "month" && {
                 sortCompare: (order: string) => (a: any, b: any) => {
                   const [aTimeStamp, bTimeStamp] = [
