@@ -3,10 +3,16 @@ import IAllForce from "../../src/common/ApiTypes/IAllForces";
 import ICrimeStreetDates from "../../src/common/ApiTypes/ICrimeStreetDates";
 import { MockDataProvider } from "./MockDataProvider";
 export const handlers = [
-  rest.get<IAllForce[]>("/forces", (req, res, ctx) => {
-    return res(ctx.json(MockDataProvider.AllForceMock()));
+  rest.get<IAllForce[]>("/forces", async (req, res, ctx) => {
+    return res(ctx.json(await MockDataProvider.AllForceMock()));
   }),
-  rest.get<ICrimeStreetDates[]>("/crime-street-dates", (req, res, ctx) => {
-    return res(ctx.json(MockDataProvider.StopSearchAvailabilityMock()));
+  rest.get<ICrimeStreetDates[]>(
+    "/crimes-street-dates",
+    async (req, res, ctx) => {
+      return res(ctx.json(await MockDataProvider.StopSearchAvailabilityMock()));
+    }
+  ),
+  rest.get("forces/:force/people", async (req, res, ctx) => {
+    return res(ctx.json(await MockDataProvider.OfficerBioMock()));
   }),
 ];

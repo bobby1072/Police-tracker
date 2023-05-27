@@ -9,14 +9,14 @@ export abstract class MockDataProvider {
     const random = Math.random();
     return random * (max - min) + min;
   }
-  public static SingleForceMock(): IAllForce {
+  public static async SingleForceMock(): Promise<IAllForce> {
     const singleForce = `${faker.location.county()} ${faker.company.buzzNoun()}`;
     return {
       id: singleForce.replaceAll(" ", "").toLowerCase(),
       name: singleForce,
     };
   }
-  public static AllForceMock(): IAllForce[] {
+  public static async AllForceMock(): Promise<IAllForce[]> {
     const forArr: IAllForce[] = [];
     for (let i = 0; i < Math.floor(this._getRandomNumber(10, 60)); i++) {
       const singleForce = `${faker.location.county()} ${faker.company.buzzNoun()}`;
