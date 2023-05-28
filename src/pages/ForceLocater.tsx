@@ -31,6 +31,7 @@ export const ForceLocater: React.FC = () => {
     if (!focusForce) {
       queryClient.removeQueries(Constants.QueryKeys.getForceInfo);
       queryClient.removeQueries(Constants.QueryKeys.getStopSearchInfo);
+      queryClient.removeQueries(Constants.QueryKeys.getForceCrimesWithDate);
     }
   }, [queryClient, focusForce]);
   const foundStopSearchAvailability = stopSearchAvailability

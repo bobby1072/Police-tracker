@@ -112,6 +112,7 @@ export const ModalAddonFunc: React.FC<IModalAddOnFuncProps> = ({
         (officerBio[0].bio || officerBio[0].contact_details) && (
           <Grid item width="100%">
             <Accordion
+              aria-label={`officerBioAccordion`}
               expanded={accordionData.officerBio}
               onChange={(event, expand) =>
                 setAccordionData((_) => ({
@@ -142,6 +143,7 @@ export const ModalAddonFunc: React.FC<IModalAddOnFuncProps> = ({
       {stopSearchDataAvailable && (
         <Grid item width="100%">
           <Accordion
+            aria-label="stopSearchAccordion"
             expanded={accordionData.stopSearch}
             onChange={(event, expanded) =>
               setAccordionData((_) => ({
@@ -175,6 +177,7 @@ export const ModalAddonFunc: React.FC<IModalAddOnFuncProps> = ({
       {crimeReport.length > 0 && (
         <Grid item width="100%">
           <Accordion
+            aria-label="crimeReportAccordion"
             expanded={accordionData.recentCrimes}
             onChange={(event, expand) =>
               setAccordionData((_) => ({

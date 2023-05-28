@@ -59,9 +59,7 @@ export const RecentCrimesData: React.FC<IRecentCrimesDataProps> = ({
   stopSearchDate,
   existingCrimeReports,
 }) => {
-  const [filterOption, setFilterOption] = useState<
-    "all" | "outcome" | "category"
-  >("all");
+  const [filterOption, setFilterOption] = useState<"all" | "category">("all");
   const [fetchedData, setFetchedData] = useState<ICrimeReport[][]>([
     existingCrimeReports,
   ]);
@@ -93,6 +91,7 @@ export const RecentCrimesData: React.FC<IRecentCrimesDataProps> = ({
     <Paper>
       {fetchedData && !crimeLoading && !crimeError ? (
         <Grid
+          aria-label="recentCrimeData"
           container
           justifyContent="center"
           alignItems="center"
@@ -109,26 +108,27 @@ export const RecentCrimesData: React.FC<IRecentCrimesDataProps> = ({
               padding={1}
               spacing={2}
             >
-              <Grid item width="20%">
-                <FormControl fullWidth>
-                  <InputLabel id="demo-simple-select-label">
-                    Category Filter
-                  </InputLabel>
-                  <Select
-                    labelId="demo-simple-select-label"
-                    id="demo-simple-select"
-                    label="Category Filter"
-                    value={filterOption}
-                    onChange={(event) => {
-                      setFilterOption(event.target.value as any);
-                    }}
-                  >
-                    <MenuItem value="all">All</MenuItem>
-                    <MenuItem value="outcome">Outcome</MenuItem>
-                    <MenuItem value="category">Type</MenuItem>
-                  </Select>
-                </FormControl>
-              </Grid>
+              {displayType === 0 && (
+                <Grid item width="20%">
+                  <FormControl fullWidth>
+                    <InputLabel id="demo-simple-select-label">
+                      Category Filter
+                    </InputLabel>
+                    <Select
+                      labelId="demo-simple-select-label"
+                      id="demo-simple-select"
+                      label="Category Filter"
+                      value={filterOption}
+                      onChange={(event) => {
+                        setFilterOption(event.target.value as any);
+                      }}
+                    >
+                      <MenuItem value="all">All</MenuItem>
+                      <MenuItem value="category">Type</MenuItem>
+                    </Select>
+                  </FormControl>
+                </Grid>
+              )}
               <Grid item width="60%">
                 <Paper>
                   <Autocomplete
@@ -180,7 +180,7 @@ export const RecentCrimesData: React.FC<IRecentCrimesDataProps> = ({
                         </Fragment>
                       ))
                     }
-                    filterOptions={(options, state) =>
+                    filterOptions={(options) =>
                       options.filter((date) => {
                         return selectedDates.every(
                           (x) => x.getTime() !== date.getTime()

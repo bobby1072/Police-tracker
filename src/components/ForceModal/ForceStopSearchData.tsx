@@ -173,7 +173,7 @@ export const ForceStopSearchData: React.FC<IForceStopSearchProps> = ({
                         </Fragment>
                       ))
                     }
-                    filterOptions={(options, state) =>
+                    filterOptions={(options) =>
                       options.filter((date) => {
                         return selectedDates.every(
                           (x) => x.getTime() !== date.getTime()

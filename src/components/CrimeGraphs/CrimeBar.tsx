@@ -23,7 +23,7 @@ abstract class CrimeReportUtils {
 
     crimeReports.forEach((report) => {
       if (
-        report.outcome_status &&
+        report.outcome_status?.category &&
         !uniqueOutcomeStatus.includes(report.outcome_status.category)
       ) {
         uniqueOutcomeStatus.push(report.outcome_status.category);
@@ -35,7 +35,7 @@ abstract class CrimeReportUtils {
 }
 interface ICrimeBarProps {
   crimeReports: ICrimeReport[][];
-  categoryFilt: "all" | "category" | "outcome";
+  categoryFilt: "all" | "category";
 }
 export const CrimeBar: React.FC<ICrimeBarProps> = ({
   crimeReports,
@@ -71,10 +71,6 @@ export const CrimeBar: React.FC<ICrimeBarProps> = ({
     case "category":
       propertyName = "category";
       uniqueCat = CrimeReportUtils.findUniqueCategory(flatCrimes);
-      break;
-    case "outcome":
-      propertyName = "outcome";
-      uniqueCat = CrimeReportUtils.findUniqueOutcomeStatus(flatCrimes);
       break;
     default:
       propertyName = "all";
