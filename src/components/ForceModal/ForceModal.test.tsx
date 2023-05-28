@@ -1,5 +1,5 @@
 import { MockDataProvider } from "../../../test/mocks/MockDataProvider";
-import { render } from "../../../test/utils/test-utils";
+import { render, screen } from "../../../test/utils/test-utils";
 import Constants from "../../common/Constants";
 import { ForceModal } from "./ForceModal";
 const reactQuery = require("react-query");
@@ -12,6 +12,7 @@ describe("ForceModal", () => {
         force={await MockDataProvider.SingleForceMock()}
       />
     );
+    expect(screen.getByLabelText("forceModal")).toBeInTheDocument();
   });
   it("Checks useQuery call", async () => {
     const useQueryMock = jest.spyOn(reactQuery, "useQuery");

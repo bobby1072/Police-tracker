@@ -39,6 +39,7 @@ export const ForceModal: React.FC<IForceModalProps> = ({
       open
       keepMounted
       onClose={closeModal}
+      aria-label="forceModal"
       aria-labelledby="keep-mounted-modal-title"
       aria-describedby="keep-mounted-modal-description"
       sx={{
