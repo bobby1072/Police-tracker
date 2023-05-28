@@ -1,85 +1,104 @@
 import {
-  Paper,
-  Grid,
-  Typography,
+  Autocomplete,
+  Chip,
   Divider,
   FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
-  Autocomplete,
-  TextField,
-  Chip,
+  Grid,
   IconButton,
+  InputLabel,
+  MenuItem,
+  Paper,
+  Select,
   Tab,
   Tabs,
+  TextField,
+  Typography,
 } from "@mui/material";
 import ClearIcon from "@mui/icons-material/Clear";
-import { Fragment, useEffect, useState } from "react";
 import IAllForce from "../../common/ApiTypes/IAllForces";
+import ICrimeReport from "../../common/ApiTypes/ICrimeReport";
+import { useForceCrimes } from "../../utils/Querys";
+import { Date } from "../../utils/ExtendedDate";
+import { Fragment, useEffect, useState } from "react";
 import { Loading } from "../../common/Loading";
-import { useForceStopAndSearch } from "../../utils/Querys";
-import { StopSearchChart } from "../CrimeGraphs/StopSearchChart";
-import { a11yProps } from "./ForceModalAddOn";
-import IPersonSearch from "../../common/ApiTypes/IPersonSearch";
-import { StopSearchDataTable } from "./StopSearchDataTable";
 import { ErrorComp } from "../../common/Error";
-interface IForceStopSearchProps {
-  stopSearchDates: Date[];
+import { fixDate } from "./ForceStopSearchData";
+import { CrimeBar } from "../CrimeGraphs/CrimeBar";
+import { CrimeTable } from "./CrimeTable";
+import { a11yProps } from "./ForceModalAddOn";
+
+interface IRecentCrimesDataProps {
+  stopSearchDate: Date;
   force: IAllForce;
+  existingCrimeReports: ICrimeReport[];
 }
-export const fixDate = (date: Date): string => {
-  const year = date.getFullYear();
-  const month = date.getMonth() + 1;
-  return `${year}-${month}`;
+const getLastTwoYearsMonthsBeforeDate = (inputDate: Date): Date[] => {
+  const inputYear = inputDate.getFullYear();
+  const inputMonth = inputDate.getMonth();
+
+  const result: Date[] = [];
+
+  let year = inputYear;
+  let month = inputMonth;
+
+  for (let i = 0; i < 24; i++) {
+    result.unshift(new Date(year, month));
+
+    month--;
+
+    if (month < 0) {
+      month = 11;
+      year--;
+    }
+  }
+
+  return result;
 };
-export const ForceStopSearchData: React.FC<IForceStopSearchProps> = ({
-  stopSearchDates,
+export const RecentCrimesData: React.FC<IRecentCrimesDataProps> = ({
   force,
+  stopSearchDate,
+  existingCrimeReports,
 }) => {
-  const sortedStopSearch = stopSearchDates.sort(
+  const [filterOption, setFilterOption] = useState<
+    "all" | "outcome" | "category"
+  >("all");
+  const [fetchedData, setFetchedData] = useState<ICrimeReport[][]>([
+    existingCrimeReports,
+  ]);
+  const lastTwoYears = getLastTwoYearsMonthsBeforeDate(stopSearchDate);
+  const sortedStopSearch = lastTwoYears.sort(
     (x, y) => y.getTime() - x.getTime()
   );
   const [selectedDates, setSelectedDates] = useState<Date[]>(
     sortedStopSearch.filter((x, index) => index < 4)
   );
-  const [fetchedData, setFetchedData] = useState<IPersonSearch[][]>();
   const {
-    isLoading: stopSearchLoading,
-    error: stopSearchError,
-    refetch: stopSearchRefetch,
-  } = useForceStopAndSearch(
+    refetch: crimeRefetch,
+    isLoading: crimeLoading,
+    error: crimeError,
+  } = useForceCrimes(
     force,
     selectedDates,
-    (data: IPersonSearch[][]) => {
+    (data: ICrimeReport[][]) => {
       setFetchedData(data);
     },
     fetchedData
   );
-  const [filterOption, setFilterOption] = useState<
-    | "all"
-    | "age"
-    | "race"
-    | "law"
-    | "gender"
-    | "outcome"
-    | "officerEthnicity"
-    | "type"
-    | "objectOfSearch"
-  >("all");
   useEffect(() => {
-    stopSearchRefetch();
-  }, [selectedDates, stopSearchRefetch, fetchedData]);
+    crimeRefetch();
+  }, [selectedDates, crimeRefetch, fetchedData]);
   const [displayType, setDisplayType] = useState<number>(0);
+
   return (
     <Paper>
-      {fetchedData && !stopSearchLoading && !stopSearchError ? (
+      {fetchedData && !crimeLoading && !crimeError ? (
         <Grid
           container
           justifyContent="center"
           alignItems="center"
           padding={3}
           spacing={1}
+          direction="column"
         >
           <Grid item width="100%">
             <Grid
@@ -90,38 +109,26 @@ export const ForceStopSearchData: React.FC<IForceStopSearchProps> = ({
               padding={1}
               spacing={2}
             >
-              {displayType === 0 && (
-                <Grid item width="20%">
-                  <FormControl fullWidth>
-                    <InputLabel id="demo-simple-select-label">
-                      Category Filter
-                    </InputLabel>
-                    <Select
-                      labelId="demo-simple-select-label"
-                      id="demo-simple-select"
-                      label="Category Filter"
-                      value={filterOption}
-                      onChange={(event) => {
-                        setFilterOption(event.target.value as any);
-                      }}
-                    >
-                      <MenuItem value="all">All</MenuItem>
-                      <MenuItem value="age">Age range</MenuItem>
-                      <MenuItem value="race">Ethnicity</MenuItem>
-                      <MenuItem value="gender">Gender</MenuItem>
-                      <MenuItem value="law">Legislation</MenuItem>
-                      <MenuItem value="officerEthnicity">
-                        Officer ethnicity
-                      </MenuItem>
-                      <MenuItem value="outcome">Outcome</MenuItem>
-                      <MenuItem value="type">Type</MenuItem>
-                      <MenuItem value="objectOfSearch">
-                        Object of search
-                      </MenuItem>
-                    </Select>
-                  </FormControl>
-                </Grid>
-              )}
+              <Grid item width="20%">
+                <FormControl fullWidth>
+                  <InputLabel id="demo-simple-select-label">
+                    Category Filter
+                  </InputLabel>
+                  <Select
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    label="Category Filter"
+                    value={filterOption}
+                    onChange={(event) => {
+                      setFilterOption(event.target.value as any);
+                    }}
+                  >
+                    <MenuItem value="all">All</MenuItem>
+                    <MenuItem value="outcome">Outcome</MenuItem>
+                    <MenuItem value="category">Type</MenuItem>
+                  </Select>
+                </FormControl>
+              </Grid>
               <Grid item width="60%">
                 <Paper>
                   <Autocomplete
@@ -152,7 +159,7 @@ export const ForceStopSearchData: React.FC<IForceStopSearchProps> = ({
                     }}
                     id="dates"
                     data-testid="dates"
-                    options={stopSearchDates}
+                    options={lastTwoYears}
                     value={selectedDates}
                     isOptionEqualToValue={(option, value) => {
                       return option === value;
@@ -215,7 +222,7 @@ export const ForceStopSearchData: React.FC<IForceStopSearchProps> = ({
                 aria-label="basic tabs example"
                 sx={{ mb: 2 }}
               >
-                <Tab label="Stop search chart" {...a11yProps(0)} />
+                <Tab label="Recent crime bar" {...a11yProps(0)} />
                 <Tab label="Data table" {...a11yProps(1)} />
               </Tabs>
               <Divider />
@@ -225,27 +232,27 @@ export const ForceStopSearchData: React.FC<IForceStopSearchProps> = ({
                     minHeight: fetchedData.length >= 1 ? "85vh" : undefined,
                   }}
                 >
-                  <StopSearchChart
-                    searches={fetchedData}
-                    categoryFilter={filterOption}
+                  <CrimeBar
+                    categoryFilt={filterOption}
+                    crimeReports={fetchedData}
                   />
                 </div>
               ) : (
-                <StopSearchDataTable searchData={fetchedData} />
+                <CrimeTable sortedCrimeReports={fetchedData} />
               )}
             </Paper>
           </Grid>
         </Grid>
       ) : (
         <Grid container justifyContent="center" alignItems="center" padding={5}>
-          {stopSearchLoading && !stopSearchError && (
+          {crimeLoading && !crimeError && (
             <Grid item>
               <Loading />
             </Grid>
           )}
-          {stopSearchError && (
+          {crimeError && (
             <Grid item>
-              <ErrorComp error={stopSearchError} />
+              <ErrorComp error={crimeError} />
             </Grid>
           )}
         </Grid>

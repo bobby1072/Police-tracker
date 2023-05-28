@@ -2,15 +2,32 @@ import { Grid, TableCell, TableRow, Typography } from "@mui/material";
 import MUIDataTable from "mui-datatables";
 import ICrimeReport from "../../common/ApiTypes/ICrimeReport";
 import { Date } from "../../utils/ExtendedDate";
+import { ErrorComp } from "../../common/Error";
 interface ICrimeTableProps {
-  sortedCrimeReports: ICrimeReport[];
+  sortedCrimeReports: ICrimeReport[][];
 }
 export const CrimeTable: React.FC<ICrimeTableProps> = ({
   sortedCrimeReports,
 }) => {
+  if (sortedCrimeReports.length < 1) {
+    return (
+      <Grid
+        container
+        justifyContent="center"
+        alignItems="center"
+        textAlign="center"
+        padding={5}
+      >
+        <Grid item>
+          <ErrorComp error={new Error("No selected dates")} />
+        </Grid>
+      </Grid>
+    );
+  }
+  const flatData = sortedCrimeReports.flat();
   return (
     <MUIDataTable
-      columns={Object.keys(sortedCrimeReports[0]).map((x) => {
+      columns={Object.keys(flatData[0]).map((x) => {
         return {
           name: x,
           label: x.toUpperCase(),
@@ -34,7 +51,7 @@ export const CrimeTable: React.FC<ICrimeTableProps> = ({
           }),
         };
       })}
-      data={sortedCrimeReports}
+      data={flatData}
       title="Recent crime reports"
       options={{
         print: false,
@@ -42,7 +59,7 @@ export const CrimeTable: React.FC<ICrimeTableProps> = ({
         filter: false,
         expandableRows: true,
         renderExpandableRow: (rowData, rowMeta) => {
-          const crime = sortedCrimeReports[rowMeta.dataIndex];
+          const crime = flatData[rowMeta.dataIndex];
           const colSpan = rowData.length + 1;
           return (
             <TableRow>

@@ -1,19 +1,8 @@
-import {
-  Typography,
-  Grid,
-  Button,
-  Link,
-  Paper,
-  Tabs,
-  Tab,
-  Divider,
-} from "@mui/material";
+import { Typography, Grid, Button, Link, Divider } from "@mui/material";
 import { useState } from "react";
 import IPoliceService from "../../common/ApiTypes/IPoliceService";
 import ICrimeReport from "../../common/ApiTypes/ICrimeReport";
 import IOfficerBio from "../../common/ApiTypes/IOfficerBio";
-import { CrimeBarChart } from "../CrimeGraphs/CrimeBarChart";
-import { CrimeTable } from "./CrimeTable";
 import { OfficerBioTable } from "./OfficerBioTable";
 import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
@@ -22,6 +11,7 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { ForceStopSearchData } from "./ForceStopSearchData";
 import IAllForce from "../../common/ApiTypes/IAllForces";
 import { Date } from "../../utils/ExtendedDate";
+import { RecentCrimesData } from "./RecentCrimesData";
 interface IModalAddOnFuncProps {
   reports: [ICrimeReport[], IPoliceService, IOfficerBio[]];
   closeModal: () => void;
@@ -50,14 +40,6 @@ export const ModalAddonFunc: React.FC<IModalAddOnFuncProps> = ({
     recentCrimes: false,
     stopSearch: false,
   });
-  const sortedCrimeReports = crimeReport.sort((a, b) => {
-    const [aTimeStamp, bTimeStamp] = [
-      Date.getNumberDate(a.month),
-      Date.getNumberDate(b.month),
-    ];
-    return aTimeStamp - bTimeStamp;
-  });
-  const [crimeDisplay, setCrimeDisplay] = useState<number>(0);
   return (
     <Grid
       container
@@ -214,30 +196,13 @@ export const ModalAddonFunc: React.FC<IModalAddOnFuncProps> = ({
             <Divider />
             <AccordionDetails>
               {accordionData.recentCrimes && (
-                <Paper>
-                  <Tabs
-                    value={crimeDisplay}
-                    onChange={(
-                      event: React.SyntheticEvent,
-                      newValue: number
-                    ) => {
-                      setCrimeDisplay(newValue);
-                    }}
-                    aria-label="basic tabs example"
-                    sx={{ mb: 2 }}
-                  >
-                    <Tab label="Pie chart" {...a11yProps(0)} />
-                    <Tab label="Data table" {...a11yProps(1)} />
-                  </Tabs>
-                  <Divider />
-                  <div style={{ padding: 7 }}>
-                    {crimeDisplay === 0 ? (
-                      <CrimeBarChart crimes={crimeReport} />
-                    ) : (
-                      <CrimeTable sortedCrimeReports={sortedCrimeReports} />
-                    )}
-                  </div>
-                </Paper>
+                <RecentCrimesData
+                  existingCrimeReports={crimeReport}
+                  force={force}
+                  stopSearchDate={
+                    new Date(new Date(crimeReport[0].month).getPrettyDate())
+                  }
+                />
               )}
             </AccordionDetails>
           </Accordion>
