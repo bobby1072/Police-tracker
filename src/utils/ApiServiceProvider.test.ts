@@ -17,5 +17,13 @@ describe("ApiServiceProvider", () => {
       await MockDataProvider.SingleForceMock()
     );
     expect(response).not.toBeNull();
+    expect(Array.isArray(response)).toBe(true);
+  });
+  it("Check crime report", async () => {
+    const response = await ApiServiceProvider.ForceCrimes({
+      force: await MockDataProvider.SingleForceMock(),
+    });
+    expect(response).not.toBeNull();
+    expect(Array.isArray(response)).toBe(true);
   });
 });

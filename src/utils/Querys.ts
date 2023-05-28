@@ -64,6 +64,68 @@ export const useForceCrimeInfoAndOfficers = (force: IAllForce) => {
   );
 };
 
+export const useForceCrimes = (
+  force: IAllForce,
+  dates: Date[],
+  onSuccessFunc?: (data: ICrimeReport[][]) => void,
+  fetchedData?: ICrimeReport[][]
+) => {
+  return useQuery<ICrimeReport[][], AxiosError>(
+    Constants.QueryKeys.getForceCrimesWithDate,
+    async () => {
+      fetchedData = fetchedData || [];
+      const existingDates = fetchedData.map(
+        (x) => new Date(fixDate(new Date(x[0].month)))
+      );
+
+      const filteredExistingData = fetchedData.filter((data) => {
+        const dataDate = new Date(fixDate(new Date(data[0].month)));
+        const dataDateOnly = new Date(
+          dataDate.getFullYear(),
+          dataDate.getMonth(),
+          dataDate.getDate()
+        );
+        return dates.some((date) => {
+          const dateOnly = new Date(
+            date.getFullYear(),
+            date.getMonth(),
+            date.getDate()
+          );
+          return dataDateOnly.getTime() === dateOnly.getTime();
+        });
+      });
+
+      const filteredDatesArray = dates.filter((x) => {
+        const check = !existingDates.some((deepX) => {
+          const deepXDate = new Date(
+            deepX.getFullYear(),
+            deepX.getMonth(),
+            deepX.getDate()
+          );
+          const xDate = new Date(x.getFullYear(), x.getMonth(), x.getDate());
+          return deepXDate.getTime() === xDate.getTime();
+        });
+        return check;
+      });
+
+      const newData =
+        filteredDatesArray.length >= 1
+          ? await Promise.all(
+              filteredDatesArray.map((x) =>
+                ApiServiceProvider.ForceCrimes({ force, date: x })
+              )
+            )
+          : [];
+
+      return [...filteredExistingData, ...newData];
+    },
+    {
+      retry: generalRetryFunc,
+      ...(onSuccessFunc && { onSuccess: onSuccessFunc }),
+    }
+  );
+};
+
 export const useForceStopAndSearch = (
   force: IAllForce,
   dates: Date[],

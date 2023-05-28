@@ -1,6 +1,7 @@
 import userEvent from "@testing-library/user-event";
 import { render, screen, waitFor } from "../../test/utils/test-utils";
 import { ForceLocater } from "./ForceLocater";
+import Constants from "../common/Constants";
 const reactQuery = require("react-query");
 describe("ForceLocater", () => {
   it("test page render", async () => {
@@ -16,9 +17,11 @@ describe("ForceLocater", () => {
       expect.any(Function),
       expect.any(Object)
     );
-    expect(useQueryMock.mock.calls[0][0]).toEqual("get-all-forces");
+    expect(useQueryMock.mock.calls[0][0]).toEqual(
+      Constants.QueryKeys.getAllForces
+    );
     expect(useQueryMock.mock.calls[1][0]).toEqual(
-      "get-stop-search-availability"
+      Constants.QueryKeys.getStopSearchAvailability
     );
     useQueryMock.mockRestore();
   });

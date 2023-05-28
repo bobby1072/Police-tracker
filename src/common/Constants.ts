@@ -3,6 +3,7 @@ enum QueryKeys {
   getStopSearchInfo = "get-stop-search-info",
   getStopSearchAvailability = "get-stop-search-availability",
   getAllForces = "get-all-forces",
+  getForceCrimesWithDate = "get-force-crimes-with-date",
 }
 export default abstract class Constants {
   public static invalidForce: string = "That force does not exist";
