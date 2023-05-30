@@ -11,6 +11,7 @@ import { useQueryClient } from "react-query";
 import Constants from "../common/Constants";
 import { Date } from "../utils/ExtendedDate";
 import { ErrorComp } from "../common/Error";
+import { ForceJsonViewer } from "../components/ForceJsonViewer/ForceJsonViewer";
 const a11yProps = (index: number) => {
   return {
     id: `simple-tab-${index}`,
@@ -76,23 +77,32 @@ export const ForceLocater: React.FC = () => {
                         label="Data view"
                         {...a11yProps(1)}
                       />
+                      <Tab
+                        aria-label="forcesJsonViewer"
+                        label="Json view"
+                        {...a11yProps(2)}
+                      />
                     </Tabs>
                     <Divider />
                     <div style={{ padding: 7 }}>
-                      {displayOption === 0 ? (
+                      {displayOption === 0 && (
                         <ForceGridContainer
                           forces={allForce}
                           setFocusForce={(data: IAllForce) => {
                             setFocusForce(data);
                           }}
                         />
-                      ) : (
+                      )}
+                      {displayOption === 1 && (
                         <ForcesDataArray
                           forces={allForce}
                           setForce={(force?: IAllForce) => {
                             setFocusForce(force);
                           }}
                         />
+                      )}
+                      {displayOption === 2 && (
+                        <ForceJsonViewer maxHeight="80vh" jsonData={allForce} />
                       )}
                     </div>
                   </div>

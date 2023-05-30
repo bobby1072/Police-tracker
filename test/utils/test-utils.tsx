@@ -6,7 +6,7 @@ const customRender = (ui: ReactElement, options?: RenderOptions) => {
   let wrapper: React.FC;
   if (options?.wrapper) {
     const Wrapper = options.wrapper;
-    wrapper = ({ children }) => (
+    wrapper = ({ children }: { children: any }) => (
       <Wrapper>
         <QueryClientProvider client={queryClient}>
           {children}
@@ -14,7 +14,7 @@ const customRender = (ui: ReactElement, options?: RenderOptions) => {
       </Wrapper>
     );
   } else {
-    wrapper = ({ children }) => (
+    wrapper = ({ children }: { children: any }) => (
       <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
     );
   }
