@@ -1,5 +1,5 @@
 import { MockDataProvider } from "../../../test/mocks/MockDataProvider";
-import { render, screen, waitFor } from "../../../test/utils/test-utils";
+import { render, screen } from "../../../test/utils/test-utils";
 import { ForcesDataArray } from "./ForcesDataArray";
 
 describe("ForcesDataArray", () => {

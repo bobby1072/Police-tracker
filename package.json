@@ -1,6 +1,6 @@
 {
   "name": "crime-tracker",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "private": true,
   "jest": {
     "moduleNameMapper": {
@@ -25,7 +25,6 @@
     "react-query": "^3.39.3",
     "react-router-dom": "^6.11.0",
     "react-scripts": "5.0.1",
-    "typescript": "^4.9.5",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
@@ -61,6 +60,7 @@
     "@types/react-dom": "^18.2.1",
     "@types/react-query": "^1.2.9",
     "@types/react-router-dom": "^5.3.3",
+    "typescript": "^4.9.5",
     "cross-fetch": "^3.1.6"
   }
 }

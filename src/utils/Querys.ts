@@ -10,11 +10,7 @@ import Constants from "../common/Constants";
 import IPersonSearch from "../common/ApiTypes/IPersonSearch";
 import { fixDate } from "../components/ForceModal/ForceStopSearchData";
 const generalRetryFunc = (count: number, error: AxiosError<unknown, any>) =>
-  Number(error.response?.status) >= 500 ||
-  error.response?.status === 429 ||
-  count >= 5
-    ? false
-    : true;
+  Number(error.response?.status) >= 400 || count >= 3 ? false : true;
 
 export const useAllForces = () => {
   const queryClient = useQueryClient();
@@ -50,14 +46,23 @@ export const useAllForces = () => {
 };
 
 export const useForceCrimeInfoAndOfficers = (force: IAllForce) => {
+  const queryClient = useQueryClient();
   return useQuery<[ICrimeReport[], IPoliceService, IOfficerBio[]], AxiosError>(
     Constants.QueryKeys.getForceInfo,
-    () =>
-      Promise.all([
-        ApiServiceProvider.ForceCrimes({ force: force }),
-        ApiServiceProvider.GetForceInfo(force),
-        ApiServiceProvider.ForceOfficers(force),
-      ]),
+    async () => {
+      const exists = queryClient.getQueryData<
+        [ICrimeReport[], IPoliceService, IOfficerBio[]]
+      >(Constants.QueryKeys.getForceInfo);
+      if (exists) {
+        return exists;
+      } else {
+        return await Promise.all([
+          ApiServiceProvider.ForceCrimes({ force: force }),
+          ApiServiceProvider.GetForceInfo(force),
+          ApiServiceProvider.ForceOfficers(force),
+        ]);
+      }
+    },
     {
       retry: generalRetryFunc,
     }
