@@ -103,6 +103,7 @@ export const ForceLocater: React.FC = () => {
                       )}
                       {displayOption === 2 && (
                         <JsonViewer
+                          maxWidth="200vh"
                           emptyListMessage="No forces"
                           maxHeight="80vh"
                           title="All forces"

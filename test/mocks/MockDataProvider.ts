@@ -4,7 +4,17 @@ import IOfficerBio from "../../src/common/ApiTypes/IOfficerBio";
 import ICrimeReport from "../../src/common/ApiTypes/ICrimeReport";
 import IPoliceService from "../../src/common/ApiTypes/IPoliceService";
 import ICrimeStreetDates from "../../src/common/ApiTypes/ICrimeStreetDates";
+import { AxiosError, AxiosResponse } from "axios";
 export abstract class MockDataProvider {
+  public static ExampleAxiosError = {
+    config: {},
+    request: {},
+    message: "Axios error.",
+    response: {
+      data: "",
+      status: 500,
+    } as AxiosResponse,
+  } as AxiosError;
   private static _getRandomNumber(min: number, max: number): number {
     const random = Math.random();
     return random * (max - min) + min;

@@ -238,6 +238,7 @@ export const ForceStopSearchData: React.FC<IForceStopSearchProps> = ({
               )}
               {displayType === 2 && (
                 <JsonViewer
+                  maxWidth="150vh"
                   emptyListMessage="No selected dates"
                   jsonData={fetchedData}
                   maxHeight="90vh"

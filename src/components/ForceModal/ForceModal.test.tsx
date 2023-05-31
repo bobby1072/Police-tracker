@@ -46,4 +46,22 @@ describe("ForceModal", () => {
     expect(screen.getByLabelText("stopSearchAccordion")).toBeInTheDocument();
     expect(screen.getByLabelText("crimeReportAccordion")).toBeInTheDocument();
   });
+  it("Checks useQuery error", async () => {
+    const useQueryMock = jest.spyOn(reactQuery, "useQuery");
+    useQueryMock.mockReturnValue({
+      data: undefined,
+      isLoading: false,
+      error: MockDataProvider.ExampleAxiosError,
+    });
+    render(
+      <ForceModal
+        closeModal={closeModalFunc}
+        force={await MockDataProvider.SingleForceMock()}
+      />
+    );
+    expect(
+      screen.getByText(MockDataProvider.ExampleAxiosError.message)
+    ).toBeInTheDocument();
+    useQueryMock.mockRestore();
+  });
 });

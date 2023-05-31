@@ -6,6 +6,7 @@ interface IForceJsonViewerProps {
   jsonData: Object;
   emptyListMessage?: string;
   emptyObjectMessage?: string;
+  maxWidth?: string;
 }
 const ScrollableGrid = styled(Grid)`
   overflow: auto;
@@ -17,6 +18,7 @@ export const JsonViewer: React.FC<IForceJsonViewerProps> = ({
   title,
   emptyListMessage,
   emptyObjectMessage,
+  maxWidth,
 }) => {
   if (
     emptyListMessage &&
@@ -65,7 +67,8 @@ export const JsonViewer: React.FC<IForceJsonViewerProps> = ({
         <ScrollableGrid
           container
           padding={1}
-          maxHeight={maxHeight}
+          maxWidth={maxWidth ?? undefined}
+          maxHeight={maxHeight ?? undefined}
           justifyContent="flex-start"
           alignItems="flex-start"
         >

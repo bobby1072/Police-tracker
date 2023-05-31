@@ -5,6 +5,7 @@ import { useForceCrimeInfoAndOfficers } from "../../utils/Querys";
 import { ModalAddonFunc } from "./ForceModalAddOn";
 import { Loading } from "../../common/Loading";
 import { Date } from "../../utils/ExtendedDate";
+import { ErrorComp } from "../../common/Error";
 const style = {
   position: "absolute",
   top: "50%",
@@ -32,9 +33,7 @@ export const ForceModal: React.FC<IForceModalProps> = ({
   stopSearchDataAvailable,
 }) => {
   const { data, isLoading, error } = useForceCrimeInfoAndOfficers(force);
-  return error ? (
-    <div onLoad={closeModal}></div>
-  ) : (
+  return (
     <Modal
       open
       keepMounted
@@ -56,7 +55,7 @@ export const ForceModal: React.FC<IForceModalProps> = ({
           alignItems="center"
           direction="column"
         >
-          {isLoading && !data ? (
+          {(error || isLoading) && !data ? (
             <Grid
               item
               sx={{
@@ -69,7 +68,8 @@ export const ForceModal: React.FC<IForceModalProps> = ({
                 textAlign: "center",
               }}
             >
-              <Loading />
+              {isLoading && <Loading />}
+              {error && <ErrorComp error={error} />}
             </Grid>
           ) : (
             <Grid item width="100%">

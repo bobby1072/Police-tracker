@@ -1,4 +1,5 @@
 import { MockDataProvider } from "../../test/mocks/MockDataProvider";
+import IPoliceService from "../common/ApiTypes/IPoliceService";
 import ApiServiceProvider from "./ApiServiceProvider";
 
 describe("ApiServiceProvider", () => {
@@ -25,5 +26,16 @@ describe("ApiServiceProvider", () => {
     });
     expect(response).not.toBeNull();
     expect(Array.isArray(response)).toBe(true);
+  });
+  it("Check police service information", async () => {
+    const response = await ApiServiceProvider.GetForceInfo(
+      await MockDataProvider.SingleForceMock()
+    );
+    expect(response).not.toBeNull();
+    const objSplit = Object.entries(response);
+    expect(objSplit.length).toBeGreaterThanOrEqual(1);
+    objSplit.forEach(([key, val]) => {
+      expect(Boolean(key)).toBe(true);
+    });
   });
 });

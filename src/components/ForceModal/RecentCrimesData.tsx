@@ -245,6 +245,7 @@ export const RecentCrimesData: React.FC<IRecentCrimesDataProps> = ({
               )}
               {displayType === 2 && (
                 <JsonViewer
+                  maxWidth="150vh"
                   emptyListMessage="No selected dates"
                   jsonData={fetchedData}
                   maxHeight="85vh"

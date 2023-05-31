@@ -3,7 +3,6 @@ import { useState } from "react";
 import IPoliceService from "../../common/ApiTypes/IPoliceService";
 import ICrimeReport from "../../common/ApiTypes/ICrimeReport";
 import IOfficerBio from "../../common/ApiTypes/IOfficerBio";
-import { OfficerBioTable } from "./OfficerBioTable";
 import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
@@ -12,6 +11,7 @@ import { ForceStopSearchData } from "./ForceStopSearchData";
 import IAllForce from "../../common/ApiTypes/IAllForces";
 import { Date } from "../../utils/ExtendedDate";
 import { RecentCrimesData } from "./RecentCrimesData";
+import { OfficerData } from "./OfficerData";
 interface IModalAddOnFuncProps {
   reports: [ICrimeReport[], IPoliceService, IOfficerBio[]];
   closeModal: () => void;
@@ -134,7 +134,7 @@ export const ModalAddonFunc: React.FC<IModalAddOnFuncProps> = ({
               <Divider />
               <AccordionDetails>
                 {accordionData.officerBio && (
-                  <OfficerBioTable officerBio={officerBio} />
+                  <OfficerData officers={officerBio} />
                 )}
               </AccordionDetails>
             </Accordion>
