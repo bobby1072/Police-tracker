@@ -11,7 +11,7 @@ import { useQueryClient } from "react-query";
 import Constants from "../common/Constants";
 import { Date } from "../utils/ExtendedDate";
 import { ErrorComp } from "../common/Error";
-import { ForceJsonViewer } from "../components/ForceJsonViewer/ForceJsonViewer";
+import { JsonViewer } from "../components/ForceJsonViewer/JsonViewer";
 const a11yProps = (index: number) => {
   return {
     id: `simple-tab-${index}`,
@@ -79,7 +79,7 @@ export const ForceLocater: React.FC = () => {
                       />
                       <Tab
                         aria-label="forcesJsonViewer"
-                        label="Json view"
+                        label="Raw data view"
                         {...a11yProps(2)}
                       />
                     </Tabs>
@@ -102,7 +102,12 @@ export const ForceLocater: React.FC = () => {
                         />
                       )}
                       {displayOption === 2 && (
-                        <ForceJsonViewer maxHeight="80vh" jsonData={allForce} />
+                        <JsonViewer
+                          emptyListMessage="No forces"
+                          maxHeight="80vh"
+                          title="All forces"
+                          jsonData={allForce}
+                        />
                       )}
                     </div>
                   </div>

@@ -24,6 +24,7 @@ import { a11yProps } from "./ForceModalAddOn";
 import IPersonSearch from "../../common/ApiTypes/IPersonSearch";
 import { StopSearchDataTable } from "./StopSearchDataTable";
 import { ErrorComp } from "../../common/Error";
+import { JsonViewer } from "../ForceJsonViewer/JsonViewer";
 interface IForceStopSearchProps {
   stopSearchDates: Date[];
   force: IAllForce;
@@ -217,9 +218,10 @@ export const ForceStopSearchData: React.FC<IForceStopSearchProps> = ({
               >
                 <Tab label="Stop search chart" {...a11yProps(0)} />
                 <Tab label="Data table" {...a11yProps(1)} />
+                <Tab label="Raw data view" {...a11yProps(2)} />
               </Tabs>
               <Divider />
-              {displayType === 0 ? (
+              {displayType === 0 && (
                 <div
                   style={{
                     minHeight: fetchedData.length >= 1 ? "85vh" : undefined,
@@ -230,8 +232,17 @@ export const ForceStopSearchData: React.FC<IForceStopSearchProps> = ({
                     categoryFilter={filterOption}
                   />
                 </div>
-              ) : (
+              )}
+              {displayType === 1 && (
                 <StopSearchDataTable searchData={fetchedData} />
+              )}
+              {displayType === 2 && (
+                <JsonViewer
+                  emptyListMessage="No selected dates"
+                  jsonData={fetchedData}
+                  maxHeight="90vh"
+                  title="Stop search data"
+                />
               )}
             </Paper>
           </Grid>

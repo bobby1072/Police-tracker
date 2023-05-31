@@ -31,14 +31,20 @@ describe("ForceLocater", () => {
     expect(useQueryMock).toHaveReturnedTimes(2);
     const gridTab = screen.getByLabelText("gridViewForces");
     const dataTab = screen.getByLabelText("dataViewForces");
+    const jsonTab = screen.getByLabelText("forcesJsonViewer");
     expect(gridTab).toHaveAttribute("aria-selected", "true");
     expect(dataTab).toHaveAttribute("aria-selected", "false");
+    expect(jsonTab).toHaveAttribute("aria-selected", "false");
     userEvent.click(dataTab);
     await waitFor(() => {
       expect(gridTab).toHaveAttribute("aria-selected", "false");
     });
     await waitFor(() => {
       expect(dataTab).toHaveAttribute("aria-selected", "true");
+    });
+    userEvent.click(jsonTab);
+    await waitFor(() => {
+      expect(jsonTab).toHaveAttribute("aria-selected", "true");
     });
   });
 });

@@ -26,6 +26,7 @@ import { fixDate } from "./ForceStopSearchData";
 import { CrimeBar } from "../CrimeGraphs/CrimeBar";
 import { CrimeTable } from "./CrimeTable";
 import { a11yProps } from "./ForceModalAddOn";
+import { JsonViewer } from "../ForceJsonViewer/JsonViewer";
 
 interface IRecentCrimesDataProps {
   stopSearchDate: Date;
@@ -224,9 +225,10 @@ export const RecentCrimesData: React.FC<IRecentCrimesDataProps> = ({
               >
                 <Tab label="Recent crime bar" {...a11yProps(0)} />
                 <Tab label="Data table" {...a11yProps(1)} />
+                <Tab label="Raw data view" {...a11yProps(2)} />
               </Tabs>
               <Divider />
-              {displayType === 0 ? (
+              {displayType === 0 && (
                 <div
                   style={{
                     minHeight: fetchedData.length >= 1 ? "85vh" : undefined,
@@ -237,8 +239,17 @@ export const RecentCrimesData: React.FC<IRecentCrimesDataProps> = ({
                     crimeReports={fetchedData}
                   />
                 </div>
-              ) : (
+              )}
+              {displayType === 1 && (
                 <CrimeTable sortedCrimeReports={fetchedData} />
+              )}
+              {displayType === 2 && (
+                <JsonViewer
+                  emptyListMessage="No selected dates"
+                  jsonData={fetchedData}
+                  maxHeight="85vh"
+                  title="Crime reports"
+                />
               )}
             </Paper>
           </Grid>
