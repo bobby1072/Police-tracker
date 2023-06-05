@@ -27,12 +27,14 @@ export default abstract class ApiServiceProvider {
     return request.data;
   }
   public static async CrimeWithLocation(
-    date: Date,
     lat: number,
-    lng: number
+    lng: number,
+    date?: Date
   ): Promise<ICrimeData[]> {
     const request = await this._httpClient.get<ICrimeData[]>(
-      `crimes-at-location?date=${this._fixDate(date)}&lat=${lat}&lng=${lng}`
+      `crimes-at-location?${
+        date ? `date=${this._fixDate(date)}&` : ""
+      }lat=${lat}&lng=${lng}`
     );
     return request.data;
   }

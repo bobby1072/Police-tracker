@@ -2,11 +2,14 @@ import { ReactElement } from "react";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { RenderOptions, render } from "@testing-library/react";
 const queryClient = new QueryClient();
+interface IWrapper {
+  children: any;
+}
 const customRender = (ui: ReactElement, options?: RenderOptions) => {
-  let wrapper: React.FC;
+  let wrapper: React.FC<IWrapper>;
   if (options?.wrapper) {
     const Wrapper = options.wrapper;
-    wrapper = ({ children }: { children: any }) => (
+    wrapper = ({ children }) => (
       <Wrapper>
         <QueryClientProvider client={queryClient}>
           {children}
@@ -14,7 +17,7 @@ const customRender = (ui: ReactElement, options?: RenderOptions) => {
       </Wrapper>
     );
   } else {
-    wrapper = ({ children }: { children: any }) => (
+    wrapper = ({ children }) => (
       <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
     );
   }
