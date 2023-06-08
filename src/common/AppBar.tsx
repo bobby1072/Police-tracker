@@ -12,6 +12,7 @@ import {
   ListItem,
   Typography,
 } from "@mui/material";
+import AddLocationAltIcon from "@mui/icons-material/AddLocationAlt";
 import ModeStandbyIcon from "@mui/icons-material/ModeStandby";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
@@ -85,7 +86,7 @@ export const MainAppBar: React.FC = () => {
         <Divider />
         <List>
           <ListItem
-            key="cpu"
+            key="forceLocater"
             disablePadding
             onClick={() => {
               window.location.href = "/force";
@@ -96,6 +97,20 @@ export const MainAppBar: React.FC = () => {
                 <ModeStandbyIcon />
               </ListItemIcon>
               <ListItemText primary="Force" />
+            </ListItemButton>
+          </ListItem>
+          <ListItem
+            key="crimeMap"
+            disablePadding
+            onClick={() => {
+              window.location.href = "/crimemap";
+            }}
+          >
+            <ListItemButton>
+              <ListItemIcon>
+                <AddLocationAltIcon />
+              </ListItemIcon>
+              <ListItemText primary="Crime map" />
             </ListItemButton>
           </ListItem>
         </List>

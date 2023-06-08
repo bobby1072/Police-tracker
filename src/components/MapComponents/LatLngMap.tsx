@@ -1,23 +1,26 @@
 import { Marker, Popup, useMapEvents } from "react-leaflet";
 import { GenerateMap } from "./GenerateMap";
+import { IlatLng } from "../FindCrimeMap/FindCrimeMapContainer";
+import { useState } from "react";
 
 interface ILatLngMapProps {
-  lat: number;
-  lng: number;
-  setLat: (lat: number) => void;
-  setLng: (lng: number) => void;
+  lat?: number;
+  lng?: number;
+  setLatLng: (latLng: IlatLng) => void;
 }
-interface ILocationFinderProps extends ILatLngMapProps {}
+interface ILocationFinderProps extends ILatLngMapProps {
+  setCurrentZoom: (zoom: number) => void;
+}
 const LocationFinder: React.FC<ILocationFinderProps> = ({
   lat,
   lng,
-  setLat,
-  setLng,
+  setLatLng,
+  setCurrentZoom,
 }) => {
   useMapEvents({
     click(e: any) {
-      setLat(e.latlng.lat);
-      setLng(e.latlng.lng);
+      setLatLng({ lat: e.latLng.lat, lng: e.latlng.lng });
+      setCurrentZoom(e.target._zoom);
     },
   });
   if (lat && lng) {
@@ -37,12 +40,22 @@ const LocationFinder: React.FC<ILocationFinderProps> = ({
 export const LatLngMap: React.FC<ILatLngMapProps> = ({
   lat,
   lng,
-  setLat,
-  setLng,
+  setLatLng,
 }) => {
+  const [currentMapZoom, setCurrentMapZoom] = useState<number>();
   return (
-    <GenerateMap>
-      <LocationFinder lat={lat} lng={lng} setLat={setLat} setLng={setLng} />
+    <GenerateMap
+      center={lat && lng ? [lat, lng] : undefined}
+      zoom={currentMapZoom}
+    >
+      <LocationFinder
+        lat={lat}
+        lng={lng}
+        setLatLng={setLatLng}
+        setCurrentZoom={(zoom: number) => {
+          setCurrentMapZoom(zoom);
+        }}
+      />
     </GenerateMap>
   );
 };
