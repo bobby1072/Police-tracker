@@ -5,6 +5,14 @@ import ICrimeReport from "../../src/common/ApiTypes/ICrimeReport";
 import IPoliceService from "../../src/common/ApiTypes/IPoliceService";
 import ICrimeStreetDates from "../../src/common/ApiTypes/ICrimeStreetDates";
 import { AxiosError, AxiosResponse } from "axios";
+const produceForce = (array: IAllForce[]): IAllForce => {
+  const singleForce = `${faker.location.county()} ${faker.company.buzzNoun()}`;
+  const id = singleForce.replaceAll(" ", "").toLowerCase();
+  if (array.some((x) => x.id === id)) {
+    return produceForce(array);
+  }
+  return { id: id, name: singleForce };
+};
 export abstract class MockDataProvider {
   public static ExampleAxiosError = {
     config: {},
@@ -29,15 +37,8 @@ export abstract class MockDataProvider {
   public static async AllForceMock(): Promise<IAllForce[]> {
     const forArr: IAllForce[] = [];
     for (let i = 0; i < Math.floor(this._getRandomNumber(10, 60)); i++) {
-      const singleForce = `${faker.location.county()} ${faker.company.buzzNoun()}`;
-      const id = singleForce.replaceAll(" ", "").toLowerCase();
-      if (forArr.some((x) => x.id === id)) {
-        return this.AllForceMock();
-      }
-      forArr.push({
-        id: singleForce.replaceAll(" ", "").toLowerCase(),
-        name: singleForce,
-      });
+      const force = produceForce(forArr);
+      forArr.push(force);
     }
     return forArr;
   }
