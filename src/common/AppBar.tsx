@@ -86,7 +86,7 @@ export const MainAppBar: React.FC = () => {
         <Divider />
         <List>
           <ListItem
-            key="forceLocater"
+            key="forces"
             disablePadding
             onClick={() => {
               window.location.href = "/force";

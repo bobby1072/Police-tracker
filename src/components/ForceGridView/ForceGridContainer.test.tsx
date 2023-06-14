@@ -35,7 +35,7 @@ describe("ForceGridContainer", () => {
     userEvent.click(forceButton);
     expect(setFocusForce).toBeCalledWith(allForce[0]);
   });
-  it("check page correctly selects forces", async () => {
+  it("checks other pages", async () => {
     const allForce = await MockDataProvider.AllForceMock();
 
     render(

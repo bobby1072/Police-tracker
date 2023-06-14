@@ -55,7 +55,7 @@ export const JsonViewer: React.FC<IForceJsonViewerProps> = ({
         padding={5}
       >
         <Grid item>
-          <ErrorComp error={new Error(emptyListMessage)} />
+          <ErrorComp error={new Error(emptyObjectMessage)} />
         </Grid>
       </Grid>
     );
@@ -83,7 +83,9 @@ export const JsonViewer: React.FC<IForceJsonViewerProps> = ({
             </Typography>
           </Grid>
           <Grid item width="100%" textAlign="start">
-            <pre style={{ color: "#00FF00" }}>{jsonInfo}</pre>
+            <pre style={{ color: "#00FF00" }} aria-label="jsonPre">
+              {jsonInfo}
+            </pre>
           </Grid>
         </ScrollableGrid>
       </Paper>
