@@ -37,7 +37,6 @@ describe("ForceGridContainer", () => {
   });
   it("checks other pages", async () => {
     const allForce = await MockDataProvider.AllForceMock();
-
     render(
       <ForceGridContainer forces={allForce} setFocusForce={setFocusForce} />
     );

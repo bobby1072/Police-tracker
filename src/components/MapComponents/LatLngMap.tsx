@@ -1,4 +1,4 @@
-import { Marker, Popup, useMapEvents } from "react-leaflet";
+import { Popup, useMapEvents } from "react-leaflet";
 import { GenerateMap } from "./GenerateMap";
 import { IlatLng } from "../FindCrimeMap/FindCrimeMapContainer";
 import { useState } from "react";
@@ -19,19 +19,17 @@ const LocationFinder: React.FC<ILocationFinderProps> = ({
 }) => {
   useMapEvents({
     click(e: any) {
-      setLatLng({ lat: e.latLng.lat, lng: e.latlng.lng });
+      const { lat, lng } = e.latlng;
+      setLatLng({ lat: lat, lng: lng });
       setCurrentZoom(e.target._zoom);
     },
   });
   if (lat && lng) {
     return (
-      <Marker position={[lat, lng]}>
-        <Popup>
-          <p>Lat: {lat}</p>
-          <br />
-          <p>Lng: {lng}</p>
-        </Popup>
-      </Marker>
+      <Popup position={[lat, lng]}>
+        <p>Lat: {lat}</p>
+        <p>Lng: {lng}</p>
+      </Popup>
     );
   } else {
     return null;

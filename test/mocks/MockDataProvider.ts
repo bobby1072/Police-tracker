@@ -30,6 +30,10 @@ export abstract class MockDataProvider {
     const forArr: IAllForce[] = [];
     for (let i = 0; i < Math.floor(this._getRandomNumber(10, 60)); i++) {
       const singleForce = `${faker.location.county()} ${faker.company.buzzNoun()}`;
+      const id = singleForce.replaceAll(" ", "").toLowerCase();
+      if (forArr.some((x) => x.id === id)) {
+        return this.AllForceMock();
+      }
       forArr.push({
         id: singleForce.replaceAll(" ", "").toLowerCase(),
         name: singleForce,

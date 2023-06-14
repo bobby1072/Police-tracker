@@ -32,6 +32,7 @@ export const GenerateMap: React.FC<IGenerateMapProps> = ({
       zoom={zoom ? zoom : 6}
       scrollWheelZoom={true}
       doubleClickZoom
+      className="leaflet-container--alt"
     >
       <MapLayers />
       {children}
