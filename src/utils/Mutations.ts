@@ -15,7 +15,11 @@ export const useStopSearchMutate = () => {
 };
 
 export const useCrimeWithLocation = () => {
-  return useMutation<ICrimeData[], AxiosError, any>(
+  return useMutation<
+    ICrimeData[],
+    AxiosError,
+    { lat: number; lng: number; date?: Date }
+  >(
     async ({ lat, lng, date }: { lat: number; lng: number; date?: Date }) =>
       await ApiServiceProvider.CrimeWithLocation(lat, lng, date)
   );

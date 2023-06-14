@@ -1,12 +1,17 @@
 import { Grid, Paper, TextField } from "@mui/material";
 import { LatLngMap } from "../MapComponents/LatLngMap";
-import { useState } from "react";
 export interface IlatLng {
   lat?: number;
   lng?: number;
 }
-export const FindCrimeMapContainer: React.FC = () => {
-  const [latLng, setLatLng] = useState<IlatLng>();
+interface IFindCrimeMApContainerProps {
+  setLatLng: (value: React.SetStateAction<IlatLng | undefined>) => void;
+  latLng?: IlatLng;
+}
+export const FindCrimeMapContainer: React.FC<IFindCrimeMApContainerProps> = ({
+  latLng,
+  setLatLng,
+}) => {
   return (
     <Paper>
       <Grid
@@ -54,9 +59,9 @@ export const FindCrimeMapContainer: React.FC = () => {
                       const numVal = Number(event.target.value);
                       if (_) {
                         _.lng = numVal;
-                        return _;
+                        return _ as IlatLng;
                       } else {
-                        return { lng: numVal, lat: undefined };
+                        return { lng: numVal, lat: undefined } as IlatLng;
                       }
                     });
                   }}
