@@ -13,6 +13,14 @@ import { Date } from "./ExtendedDate";
 const generalRetryFunc = (count: number, error: AxiosError<unknown, any>) =>
   Number(error.response?.status) >= 400 || count >= 3 ? false : true;
 
+export const useCrimeLastUpdated = () => {
+  return useQuery(
+    Constants.QueryKeys.getCrimeLastUpdated,
+    () => ApiServiceProvider.CrimeLastUpdated(),
+    { retry: generalRetryFunc }
+  );
+};
+
 export const useAllForces = () => {
   const queryClient = useQueryClient();
   return useQuery<IAllForce[], AxiosError>(
