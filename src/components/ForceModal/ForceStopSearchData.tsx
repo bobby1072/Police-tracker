@@ -25,6 +25,7 @@ import IPersonSearch from "../../common/ApiTypes/IPersonSearch";
 import { StopSearchDataTable } from "./StopSearchDataTable";
 import { ErrorComp } from "../../common/Error";
 import { JsonViewer } from "../ForceJsonViewer/JsonViewer";
+import { Date } from "../../utils/ExtendedDate";
 interface IForceStopSearchProps {
   stopSearchDates: Date[];
   force: IAllForce;

@@ -4,6 +4,7 @@ import IAllForce from "../common/ApiTypes/IAllForces";
 import { AxiosError } from "axios";
 import IPersonSearch from "../common/ApiTypes/IPersonSearch";
 import ICrimeData from "../common/ApiTypes/ICrimeData";
+import { Date } from "./ExtendedDate";
 
 export const useStopSearchMutate = () => {
   return useMutation<IPersonSearch[][], AxiosError, any>(
@@ -14,13 +15,16 @@ export const useStopSearchMutate = () => {
   );
 };
 
-export const useCrimeWithLocation = () => {
+export const useCrimeWithLocation = (
+  onErrorFunc?: (error: AxiosError) => void
+) => {
   return useMutation<
     ICrimeData[],
     AxiosError,
     { lat: number; lng: number; date?: Date }
   >(
     async ({ lat, lng, date }: { lat: number; lng: number; date?: Date }) =>
-      await ApiServiceProvider.CrimeWithLocation(lat, lng, date)
+      await ApiServiceProvider.CrimeWithLocation(lat, lng, date),
+    { ...(onErrorFunc && { onError: onErrorFunc }) }
   );
 };

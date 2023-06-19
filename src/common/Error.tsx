@@ -5,7 +5,12 @@ interface IErrorProps {
 }
 export const ErrorComp: React.FC<IErrorProps> = ({ error }) => {
   return (
-    <Typography fontSize={35} variant="subtitle2" textAlign="center">
+    <Typography
+      fontSize={35}
+      variant="subtitle2"
+      textAlign="center"
+      color="error"
+    >
       {error.message}
     </Typography>
   );
