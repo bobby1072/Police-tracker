@@ -1,4 +1,5 @@
 import { LayersControl, MapContainer, TileLayer } from "react-leaflet";
+import "leaflet/dist/leaflet.css";
 const MapLayers: React.FC = () => {
   const { BaseLayer } = LayersControl;
   return (
@@ -17,11 +18,22 @@ const MapLayers: React.FC = () => {
 };
 interface IGenerateMapProps {
   children: JSX.Element | JSX.Element[];
+  center?: [number, number];
   zoom?: number;
 }
-export const GenerateMap: React.FC<IGenerateMapProps> = ({ children }) => {
+export const GenerateMap: React.FC<IGenerateMapProps> = ({
+  children,
+  center,
+  zoom,
+}) => {
   return (
-    <MapContainer>
+    <MapContainer
+      center={center ? center : [52.4912, -1.9348]}
+      zoom={zoom ? zoom : 6}
+      scrollWheelZoom={true}
+      doubleClickZoom
+      className="leaflet-container--alt"
+    >
       <MapLayers />
       {children}
     </MapContainer>

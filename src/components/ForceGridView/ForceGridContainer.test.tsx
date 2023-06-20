@@ -2,18 +2,20 @@ import { ForceGridContainer } from "./ForceGridContainer";
 import { MockDataProvider } from "../../../test/mocks/MockDataProvider";
 import { fireEvent, render, screen } from "../../../test/utils/test-utils";
 import userEvent from "@testing-library/user-event";
+import IAllForce from "../../common/ApiTypes/IAllForces";
 describe("ForceGridContainer", () => {
   const setFocusForce = jest.fn();
+  let allForce: IAllForce[];
+  beforeAll(async () => {
+    allForce = await MockDataProvider.AllForceMock();
+  });
   it("check container renders", async () => {
-    const allForce = await MockDataProvider.AllForceMock();
     render(
       <ForceGridContainer setFocusForce={setFocusForce} forces={allForce} />
     );
     expect(screen.getByLabelText("forceGridMainContainer")).toBeInTheDocument();
   });
   it("check forces are rendered", async () => {
-    const allForce = await MockDataProvider.AllForceMock();
-
     render(
       <ForceGridContainer setFocusForce={setFocusForce} forces={allForce} />
     );
@@ -24,8 +26,6 @@ describe("ForceGridContainer", () => {
     ).toEqual(5);
   });
   it("check state is set when force clicked", async () => {
-    const allForce = await MockDataProvider.AllForceMock();
-
     render(
       <ForceGridContainer forces={allForce} setFocusForce={setFocusForce} />
     );
@@ -36,8 +36,6 @@ describe("ForceGridContainer", () => {
     expect(setFocusForce).toBeCalledWith(allForce[0]);
   });
   it("checks other pages", async () => {
-    const allForce = await MockDataProvider.AllForceMock();
-
     render(
       <ForceGridContainer forces={allForce} setFocusForce={setFocusForce} />
     );

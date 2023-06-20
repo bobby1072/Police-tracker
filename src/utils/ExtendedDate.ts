@@ -10,5 +10,13 @@ class ExtenedDate extends Date {
     const timestamp: number = Math.floor(date.getTime() / 1000);
     return timestamp;
   }
+  public getYYYYMMDate(): string {
+    const year = this.getFullYear().toString();
+    let month = (this.getMonth() + 1).toString();
+    if (month.length === 1) {
+      month = `0${month}`;
+    }
+    return `${year}-${month}`;
+  }
 }
 export { ExtenedDate as Date };

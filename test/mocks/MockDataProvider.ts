@@ -5,6 +5,16 @@ import ICrimeReport from "../../src/common/ApiTypes/ICrimeReport";
 import IPoliceService from "../../src/common/ApiTypes/IPoliceService";
 import ICrimeStreetDates from "../../src/common/ApiTypes/ICrimeStreetDates";
 import { AxiosError, AxiosResponse } from "axios";
+import ICrimeData from "../../src/common/ApiTypes/ICrimeData";
+import { Date } from "../../src/utils/ExtendedDate";
+const produceForce = (array: IAllForce[]): IAllForce => {
+  const singleForce = `${faker.location.county()} ${faker.company.buzzNoun()}`;
+  const id = singleForce.replaceAll(" ", "").toLowerCase();
+  if (array.some((x) => x.id === id)) {
+    return produceForce(array);
+  }
+  return { id: id, name: singleForce };
+};
 export abstract class MockDataProvider {
   public static ExampleAxiosError = {
     config: {},
@@ -29,13 +39,33 @@ export abstract class MockDataProvider {
   public static async AllForceMock(): Promise<IAllForce[]> {
     const forArr: IAllForce[] = [];
     for (let i = 0; i < Math.floor(this._getRandomNumber(10, 60)); i++) {
-      const singleForce = `${faker.location.county()} ${faker.company.buzzNoun()}`;
-      forArr.push({
-        id: singleForce.replaceAll(" ", "").toLowerCase(),
-        name: singleForce,
-      });
+      const force = produceForce(forArr);
+      forArr.push(force);
     }
     return forArr;
+  }
+  public static async SingleCrimeData(): Promise<ICrimeData> {
+    return {
+      category: faker.hacker.noun(),
+      context: faker.definitions.person.male_first_name[0],
+      id: faker.number.int(),
+      location: {
+        latitude: faker.number.float().toString(),
+        longitude: faker.number.float().toString(),
+        street: {
+          id: faker.number.int(),
+          name: faker.location.street(),
+        },
+      },
+      location_subtype: faker.location.city(),
+      location_type: faker.location.state(),
+      month: new Date(faker.date.anytime()).getYYYYMMDate(),
+      outcome_status: {
+        category: faker.company.buzzAdjective(),
+        date: faker.date.anytime().toISOString(),
+      },
+      persistent_id: faker.string.uuid(),
+    };
   }
   public static async OfficerBioMock(): Promise<IOfficerBio[]> {
     const forArr: IOfficerBio[] = [];

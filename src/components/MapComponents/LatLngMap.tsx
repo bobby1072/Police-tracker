@@ -1,34 +1,35 @@
-import { Marker, Popup, useMapEvents } from "react-leaflet";
+import { Popup, useMapEvents } from "react-leaflet";
 import { GenerateMap } from "./GenerateMap";
+import { IlatLng } from "../FindCrimeMap/FindCrimeMapContainer";
+import { useState } from "react";
 
 interface ILatLngMapProps {
-  lat: number;
-  lng: number;
-  setLat: (lat: number) => void;
-  setLng: (lng: number) => void;
+  lat?: number;
+  lng?: number;
+  setLatLng: (latLng: IlatLng) => void;
 }
-interface ILocationFinderProps extends ILatLngMapProps {}
+interface ILocationFinderProps extends ILatLngMapProps {
+  setCurrentZoom: (zoom: number) => void;
+}
 const LocationFinder: React.FC<ILocationFinderProps> = ({
   lat,
   lng,
-  setLat,
-  setLng,
+  setLatLng,
+  setCurrentZoom,
 }) => {
   useMapEvents({
     click(e: any) {
-      setLat(e.latlng.lat);
-      setLng(e.latlng.lng);
+      const { lat, lng } = e.latlng;
+      setLatLng({ lat: lat.toFixed(6), lng: lng.toFixed(6) });
+      setCurrentZoom(e.target._zoom);
     },
   });
   if (lat && lng) {
     return (
-      <Marker position={[lat, lng]}>
-        <Popup>
-          <p>Lat: {lat}</p>
-          <br />
-          <p>Lng: {lng}</p>
-        </Popup>
-      </Marker>
+      <Popup position={[lat, lng]}>
+        <p>Lat: {lat}</p>
+        <p>Lng: {lng}</p>
+      </Popup>
     );
   } else {
     return null;
@@ -37,12 +38,22 @@ const LocationFinder: React.FC<ILocationFinderProps> = ({
 export const LatLngMap: React.FC<ILatLngMapProps> = ({
   lat,
   lng,
-  setLat,
-  setLng,
+  setLatLng,
 }) => {
+  const [currentMapZoom, setCurrentMapZoom] = useState<number>();
   return (
-    <GenerateMap>
-      <LocationFinder lat={lat} lng={lng} setLat={setLat} setLng={setLng} />
+    <GenerateMap
+      center={lat && lng ? [lat, lng] : undefined}
+      zoom={currentMapZoom}
+    >
+      <LocationFinder
+        lat={lat}
+        lng={lng}
+        setLatLng={setLatLng}
+        setCurrentZoom={(zoom: number) => {
+          setCurrentMapZoom(zoom);
+        }}
+      />
     </GenerateMap>
   );
 };
