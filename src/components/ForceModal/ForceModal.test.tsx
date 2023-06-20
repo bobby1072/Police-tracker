@@ -1,28 +1,23 @@
 import { MockDataProvider } from "../../../test/mocks/MockDataProvider";
 import { render, screen } from "../../../test/utils/test-utils";
+import IAllForce from "../../common/ApiTypes/IAllForces";
 import Constants from "../../common/Constants";
 import { Date } from "../../utils/ExtendedDate";
 import { ForceModal } from "./ForceModal";
 const reactQuery = require("react-query");
 describe("ForceModal", () => {
   const closeModalFunc = jest.fn();
+  let singleForce: IAllForce;
+  beforeAll(async () => {
+    singleForce = await MockDataProvider.SingleForceMock();
+  });
   it("Check renders", async () => {
-    render(
-      <ForceModal
-        closeModal={closeModalFunc}
-        force={await MockDataProvider.SingleForceMock()}
-      />
-    );
+    render(<ForceModal closeModal={closeModalFunc} force={singleForce} />);
     expect(screen.getByLabelText("forceModal")).toBeInTheDocument();
   });
   it("Checks useQuery call", async () => {
     const useQueryMock = jest.spyOn(reactQuery, "useQuery");
-    render(
-      <ForceModal
-        closeModal={closeModalFunc}
-        force={await MockDataProvider.SingleForceMock()}
-      />
-    );
+    render(<ForceModal closeModal={closeModalFunc} force={singleForce} />);
     expect(useQueryMock).toHaveBeenCalled();
     expect(useQueryMock).toHaveBeenCalledWith(
       expect.any(String),
@@ -38,7 +33,7 @@ describe("ForceModal", () => {
     render(
       <ForceModal
         closeModal={closeModalFunc}
-        force={await MockDataProvider.SingleForceMock()}
+        force={singleForce}
         stopSearchDataAvailable={[new Date()]}
       />
     );
@@ -53,12 +48,7 @@ describe("ForceModal", () => {
       isLoading: false,
       error: MockDataProvider.ExampleAxiosError,
     });
-    render(
-      <ForceModal
-        closeModal={closeModalFunc}
-        force={await MockDataProvider.SingleForceMock()}
-      />
-    );
+    render(<ForceModal closeModal={closeModalFunc} force={singleForce} />);
     expect(
       screen.getByText(MockDataProvider.ExampleAxiosError.message)
     ).toBeInTheDocument();
