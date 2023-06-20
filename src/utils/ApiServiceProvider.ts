@@ -8,6 +8,7 @@ import ICrimeStreetDates from "../common/ApiTypes/ICrimeStreetDates";
 import IPersonSearch from "../common/ApiTypes/IPersonSearch";
 import { Date } from "./ExtendedDate";
 import ICrimeLastUpdate from "../common/ApiTypes/ICrimeLastUpdate";
+import IAdvancedCrimeData from "../common/ApiTypes/IAdvancedCrimeData";
 export default abstract class ApiServiceProvider {
   private static _httpClient = axios.create({
     baseURL:
@@ -25,7 +26,7 @@ export default abstract class ApiServiceProvider {
   }
   public static async CrimeLastUpdated(): Promise<Date> {
     const request = await this._httpClient.get<ICrimeLastUpdate>(
-      "https://data.police.uk/api/crime-last-updated"
+      "crime-last-updated"
     );
     return new Date(request.data.date);
   }
@@ -78,6 +79,14 @@ export default abstract class ApiServiceProvider {
   > {
     const request = await this._httpClient.get<ICrimeStreetDates[]>(
       "crimes-street-dates"
+    );
+    return request.data;
+  }
+  public static async OutcomeForSpecificCrime(
+    persistentId: string
+  ): Promise<IAdvancedCrimeData> {
+    const request = await this._httpClient.get<IAdvancedCrimeData>(
+      `outcomes-for-crime/${persistentId}`
     );
     return request.data;
   }

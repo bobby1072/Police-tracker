@@ -13,13 +13,12 @@ import { Date } from "./ExtendedDate";
 const generalRetryFunc = (count: number, error: AxiosError<unknown, any>) =>
   Number(error.response?.status) >= 400 || count >= 3 ? false : true;
 
-export const useCrimeLastUpdated = () => {
-  return useQuery(
+export const useCrimeLastUpdated = () =>
+  useQuery(
     Constants.QueryKeys.getCrimeLastUpdated,
     () => ApiServiceProvider.CrimeLastUpdated(),
     { retry: generalRetryFunc }
   );
-};
 
 export const useAllForces = () => {
   const queryClient = useQueryClient();
@@ -83,8 +82,8 @@ export const useForceCrimes = (
   dates: Date[],
   onSuccessFunc?: (data: ICrimeReport[][]) => void,
   fetchedData?: ICrimeReport[][]
-) => {
-  return useQuery<ICrimeReport[][], AxiosError>(
+) =>
+  useQuery<ICrimeReport[][], AxiosError>(
     Constants.QueryKeys.getForceCrimesWithDate,
     async () => {
       fetchedData = fetchedData || [];
@@ -138,15 +137,14 @@ export const useForceCrimes = (
       ...(onSuccessFunc && { onSuccess: onSuccessFunc }),
     }
   );
-};
 
 export const useForceStopAndSearch = (
   force: IAllForce,
   dates: Date[],
   onSuccessFunc?: (data: IPersonSearch[][]) => void,
   fetchedData?: IPersonSearch[][]
-) => {
-  return useQuery<IPersonSearch[][], AxiosError>(
+) =>
+  useQuery<IPersonSearch[][], AxiosError>(
     Constants.QueryKeys.getStopSearchInfo,
     async () => {
       fetchedData = fetchedData || [];
@@ -200,7 +198,6 @@ export const useForceStopAndSearch = (
       ...(onSuccessFunc && { onSuccess: onSuccessFunc }),
     }
   );
-};
 
 export const useStopSearchAvailability = () => {
   const queryClient = useQueryClient();
