@@ -3,9 +3,9 @@ import IAdvancedCrimeData from "../../common/ApiTypes/IAdvancedCrimeData";
 interface IAdvancedCrimeDisplayProps {
   advancedData: IAdvancedCrimeData;
 }
-export const AdvancedCrimeDisplay: React.FC<
-  IAdvancedCrimeDisplayProps
-> = () => {
+export const AdvancedCrimeDisplay: React.FC<IAdvancedCrimeDisplayProps> = ({
+  advancedData,
+}) => {
   return (
     <Paper>
       <Grid

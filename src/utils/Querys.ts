@@ -13,13 +13,21 @@ import { Date } from "./ExtendedDate";
 const generalRetryFunc = (count: number, error: AxiosError<unknown, any>) =>
   Number(error.response?.status) >= 400 || count >= 3 ? false : true;
 
-export const useCrimeLastUpdated = () =>
-  useQuery(
+export const useCrimeLastUpdated = () => {
+  const queryClient = useQueryClient();
+  return useQuery<Date, AxiosError>(
     Constants.QueryKeys.getCrimeLastUpdated,
-    () => ApiServiceProvider.CrimeLastUpdated(),
+    async () => {
+      const exists = queryClient.getQueryData<Date>(
+        Constants.QueryKeys.getCrimeLastUpdated
+      );
+      if (exists) {
+        return exists;
+      } else return await ApiServiceProvider.CrimeLastUpdated();
+    },
     { retry: generalRetryFunc }
   );
-
+};
 export const useAllForces = () => {
   const queryClient = useQueryClient();
   return useQuery<IAllForce[], AxiosError>(

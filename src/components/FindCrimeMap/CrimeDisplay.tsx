@@ -209,7 +209,7 @@ export const CrimeDisplay: React.FC<ICrimeDisplayProps> = ({ crime }) => {
             </Button>
           </Grid>
         )}
-        {(advancedCrime || advancedCrimeError || advancedCrimeLoading) && (
+        {(advancedCrimeError || advancedCrimeLoading) && (
           <Grid item width="100%">
             <Paper>
               <Grid
