@@ -41,8 +41,8 @@ export const CrimeMap: React.FC = () => {
     crimeSearchReset();
     if (latLng?.lat && latLng.lng) {
       crimeMutation({
-        lat: Number(latLng.lat.toFixed(6)),
-        lng: Number(latLng.lng.toFixed(6)),
+        lat: Number(latLng.lat),
+        lng: Number(latLng.lng),
         date: crimeDate,
       });
     }

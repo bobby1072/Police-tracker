@@ -20,7 +20,7 @@ const LocationFinder: React.FC<ILocationFinderProps> = ({
   useMapEvents({
     click(e: any) {
       const { lat, lng } = e.latlng;
-      setLatLng({ lat: lat, lng: lng });
+      setLatLng({ lat: lat.toFixed(6), lng: lng.toFixed(6) });
       setCurrentZoom(e.target._zoom);
     },
   });
