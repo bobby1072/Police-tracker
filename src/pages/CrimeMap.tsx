@@ -33,6 +33,11 @@ export const CrimeMap: React.FC = () => {
     error: crimeError,
   } = useCrimeWithLocation();
   useEffect(() => {
+    if (crimeUpdate) {
+      setCrimeDate(crimeUpdate);
+    }
+  }, [crimeUpdate]);
+  useEffect(() => {
     crimeSearchReset();
     if (latLng?.lat && latLng.lng) {
       crimeMutation({
@@ -57,6 +62,7 @@ export const CrimeMap: React.FC = () => {
             >
               <Grid item width="100%" minHeight="50vh">
                 <FindCrimeMapContainer
+                  maxCrimeDate={crimeUpdate}
                   latLng={latLng}
                   setLatLng={setLatLng}
                   setDate={(data: Date) => {

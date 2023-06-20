@@ -17,12 +17,14 @@ interface IFindCrimeMApContainerProps {
   date?: Date;
   setLatLng: (value: React.SetStateAction<IlatLng | undefined>) => void;
   latLng?: IlatLng;
+  maxCrimeDate?: Date;
 }
 export const FindCrimeMapContainer: React.FC<IFindCrimeMApContainerProps> = ({
   latLng,
   setLatLng,
   setDate,
   date,
+  maxCrimeDate,
 }) => {
   return (
     <Paper>
@@ -85,6 +87,7 @@ export const FindCrimeMapContainer: React.FC<IFindCrimeMApContainerProps> = ({
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <DatePicker
                     label={"Month"}
+                    maxDate={maxCrimeDate ? dayjs(maxCrimeDate) : undefined}
                     value={date ? dayjs(date) : undefined}
                     onChange={(value: any) => {
                       setDate(value.$d as Date);

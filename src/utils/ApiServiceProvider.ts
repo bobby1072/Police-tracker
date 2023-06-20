@@ -34,9 +34,10 @@ export default abstract class ApiServiceProvider {
     lng: number,
     date?: Date
   ): Promise<ICrimeData[]> {
+    const fixDate = new Date(date?.toISOString() ?? "");
     const request = await this._httpClient.get<ICrimeData[]>(
       `crimes-at-location?${
-        date ? `date=${date.getYYYYMMDate()}&` : ""
+        date ? `date=${fixDate}&` : ""
       }lat=${lat}&lng=${lng}`
     );
     return request.data;
