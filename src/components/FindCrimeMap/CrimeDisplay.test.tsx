@@ -13,7 +13,7 @@ describe("CrimeDisplay", () => {
     expect(screen.queryByText(crime.persistent_id)).not.toBeInTheDocument();
     userEvent.click(screen.getByLabelText("togglePersitentId"));
     await waitFor(() => {
-      expect(screen.getByText(crime.persistent_id)).toBeInTheDocument();
+      expect(screen.getByDisplayValue(crime.persistent_id)).toBeInTheDocument();
     });
   });
   it("Check all other relavent details are shown", async () => {

@@ -95,7 +95,7 @@ export const ModalAddonFunc: React.FC<IModalAddOnFuncProps> = ({
           {policeService.engagement_methods
             .filter((x) => x.type !== "telephone" && x.type !== "web")
             .map((x) => (
-              <Grid item>
+              <Grid item key={x.title}>
                 <Button
                   variant="contained"
                   onClick={() => {

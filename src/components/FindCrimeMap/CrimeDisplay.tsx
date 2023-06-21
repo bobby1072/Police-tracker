@@ -6,16 +6,12 @@ import {
   Typography,
   TextField,
   styled,
-  Button,
+  InputAdornment,
 } from "@mui/material";
 import ICrimeData from "../../common/ApiTypes/ICrimeData";
 import { useState } from "react";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
-import { useAdvancedCrimeSearch } from "../../utils/Mutations";
-import { ErrorComp } from "../../common/Error";
-import { Loading } from "../../common/Loading";
-import { AdvancedCrimeDisplay } from "./AdvancedCrimeDisplay";
 const StyledTextField = styled(TextField)(() => ({
   inputProps: {
     style: {
@@ -38,13 +34,6 @@ const getLocationWidthPercent = (crime: ICrimeData) => {
 };
 export const CrimeDisplay: React.FC<ICrimeDisplayProps> = ({ crime }) => {
   const [showPeristentId, setShowPeristentId] = useState<boolean>(false);
-  const {
-    data: advancedCrime,
-    isLoading: advancedCrimeLoading,
-    error: advancedCrimeError,
-    reset: advancedReset,
-    mutate: advancedCrimeMutate,
-  } = useAdvancedCrimeSearch();
   return (
     <Paper>
       <Grid
@@ -64,31 +53,37 @@ export const CrimeDisplay: React.FC<ICrimeDisplayProps> = ({ crime }) => {
           <Divider />
         </Grid>
         {crime.persistent_id && (
-          <Grid item width="100%" position="initial">
-            <Grid
-              container
-              justifyContent="center"
-              alignItems="center"
-              direction="row"
-              spacing={2}
-            >
-              <Grid item>
-                <IconButton
-                  aria-label="togglePersitentId"
-                  onClick={() => {
-                    setShowPeristentId(showPeristentId ? false : true);
-                  }}
-                  edge="end"
-                >
-                  {showPeristentId ? <VisibilityOffIcon /> : <VisibilityIcon />}
-                </IconButton>
-              </Grid>
-              <Grid item>
-                <Typography fontSize={15} variant="body1">
-                  {showPeristentId ? crime.persistent_id : "Persistent id"}
-                </Typography>
-              </Grid>
-            </Grid>
+          <Grid
+            item
+            width={showPeristentId ? "86%" : undefined}
+            position="initial"
+          >
+            <StyledTextField
+              fullWidth
+              disabled
+              label="Persistent id"
+              value={showPeristentId ? crime.persistent_id : ""}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton
+                      edge="end"
+                      size="small"
+                      aria-label="togglePersitentId"
+                      onClick={() => {
+                        setShowPeristentId(showPeristentId ? false : true);
+                      }}
+                    >
+                      {showPeristentId ? (
+                        <VisibilityOffIcon />
+                      ) : (
+                        <VisibilityIcon />
+                      )}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
+            />
           </Grid>
         )}
         {crime.id && (
@@ -193,54 +188,6 @@ export const CrimeDisplay: React.FC<ICrimeDisplayProps> = ({ crime }) => {
                 </Grid>
               )}
             </Grid>
-          </Grid>
-        )}
-        {crime.persistent_id && crime.outcome_status && (
-          <Grid item>
-            <Button
-              variant="contained"
-              disabled={advancedCrime || advancedCrimeLoading ? true : false}
-              onClick={() => {
-                advancedReset();
-                advancedCrimeMutate({ persistentId: crime.persistent_id });
-              }}
-            >
-              Advance outcome search
-            </Button>
-          </Grid>
-        )}
-        {(advancedCrimeError || advancedCrimeLoading) && (
-          <Grid item width="100%">
-            <Paper>
-              <Grid
-                container
-                justifyContent="center"
-                alignItems="center"
-                minHeight="10vh"
-              >
-                {advancedCrimeError &&
-                  !advancedCrimeLoading &&
-                  !advancedCrime && (
-                    <Grid item>
-                      <ErrorComp
-                        error={new Error(advancedCrimeError.message)}
-                      />
-                    </Grid>
-                  )}
-                {!advancedCrimeError &&
-                  !advancedCrime &&
-                  advancedCrimeLoading && (
-                    <Grid item>
-                      <Loading />
-                    </Grid>
-                  )}
-              </Grid>
-            </Paper>
-          </Grid>
-        )}
-        {advancedCrime && !advancedCrimeError && !advancedCrimeLoading && (
-          <Grid item width="100%">
-            <AdvancedCrimeDisplay advancedData={advancedCrime} />
           </Grid>
         )}
       </Grid>

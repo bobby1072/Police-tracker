@@ -118,7 +118,7 @@ export const CrimeMap: React.FC = () => {
               {crimeData &&
                 crimeData.length > 0 &&
                 crimeData.map((x) => (
-                  <Grid item width="100%">
+                  <Grid item width="100%" key={`crimeDisplay${x.id}`}>
                     <CrimeDisplay crime={x} />
                   </Grid>
                 ))}

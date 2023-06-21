@@ -96,12 +96,14 @@ export const ForceGridContainer: React.FC<IForceGridContainerProps> = ({
                   InputProps={{
                     endAdornment: (
                       <InputAdornment position="end">
-                        <IconButton edge="end" size="small">
-                          <Cancel
-                            onClick={() => {
-                              setSearchVal("");
-                            }}
-                          />
+                        <IconButton
+                          edge="end"
+                          size="small"
+                          onClick={() => {
+                            setSearchVal("");
+                          }}
+                        >
+                          <Cancel />
                         </IconButton>
                       </InputAdornment>
                     ),
@@ -130,7 +132,12 @@ export const ForceGridContainer: React.FC<IForceGridContainerProps> = ({
             .filter((_, index) => allowIndex(index + 1, matchRange))
             .map((x) => {
               return (
-                <Grid item width="33%" aria-label={x.id}>
+                <Grid
+                  item
+                  width="33%"
+                  aria-label={x.id}
+                  key={`forceGridTab${x.id}`}
+                >
                   <ForceGridTab
                     force={x}
                     setForce={(data: IAllForce) => {
