@@ -2,6 +2,7 @@ import { Popup, useMapEvents } from "react-leaflet";
 import { GenerateMap } from "./GenerateMap";
 import { IlatLng } from "../FindCrimeMap/FindCrimeMapContainer";
 import { useState } from "react";
+import { Typography } from "@mui/material";
 
 interface ILatLngMapProps {
   lat?: number;
@@ -27,8 +28,11 @@ const LocationFinder: React.FC<ILocationFinderProps> = ({
   if (lat && lng) {
     return (
       <Popup position={[lat, lng]}>
-        <p>Lat: {lat}</p>
-        <p>Lng: {lng}</p>
+        <Typography variant="body1" fontSize={15}>
+          Lat: {lat}
+          <br />
+          Lng: {lng}
+        </Typography>
       </Popup>
     );
   } else {

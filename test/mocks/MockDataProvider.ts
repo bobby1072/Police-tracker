@@ -67,6 +67,29 @@ export abstract class MockDataProvider {
       persistent_id: faker.string.uuid(),
     };
   }
+  public static SingleCrimeDataSync(): ICrimeData {
+    return {
+      category: faker.hacker.noun(),
+      context: faker.definitions.person.male_first_name[0],
+      id: faker.number.int(),
+      location: {
+        latitude: faker.number.float().toString(),
+        longitude: faker.number.float().toString(),
+        street: {
+          id: faker.number.int(),
+          name: faker.location.street(),
+        },
+      },
+      location_subtype: faker.location.city(),
+      location_type: faker.location.state(),
+      month: new Date(faker.date.anytime()).getYYYYMMDate(),
+      outcome_status: {
+        category: faker.company.buzzAdjective(),
+        date: faker.date.anytime().toISOString(),
+      },
+      persistent_id: faker.string.uuid(),
+    };
+  }
   public static async OfficerBioMock(): Promise<IOfficerBio[]> {
     const forArr: IOfficerBio[] = [];
     for (let i = 0; i < Math.floor(this._getRandomNumber(10, 60)); i++) {
@@ -79,28 +102,49 @@ export abstract class MockDataProvider {
     return forArr;
   }
   public static async CrimeReportMock(): Promise<ICrimeReport[]> {
-    const reportArr: ICrimeReport[] = [];
+    const reportArr = [];
     for (let i = 0; i < Math.floor(this._getRandomNumber(10, 60)); i++) {
-      const crimeReport: ICrimeReport = {
-        category: faker.word.noun(),
-        location_type: Math.random() < 0.5 ? null : faker.random.word(),
-        location: Math.random() < 0.5 ? null : faker.address.streetAddress(),
-        context: faker.lorem.sentence(),
-        outcome_status:
-          Math.random() < 0.5
-            ? null
-            : {
-                category: faker.random.word(),
-                date: faker.date.past().toISOString(),
-              },
-        persistent_id: faker.string.uuid(),
-        id: faker.number.int(),
-        location_subtype: faker.person.zodiacSign(),
-        month: faker.date.past().toISOString(),
-      };
-      reportArr.push(crimeReport);
+      reportArr.push(this.SingleCrimeReport());
     }
-    return reportArr;
+    return (await Promise.all(reportArr)).flat();
+  }
+  public static async SingleCrimeReport(): Promise<ICrimeReport> {
+    return {
+      category: faker.word.noun(),
+      location_type: Math.random() < 0.5 ? null : faker.random.word(),
+      location: Math.random() < 0.5 ? null : faker.address.streetAddress(),
+      context: faker.lorem.sentence(),
+      outcome_status:
+        Math.random() < 0.5
+          ? null
+          : {
+              category: faker.random.word(),
+              date: faker.date.past().toISOString(),
+            },
+      persistent_id: faker.string.uuid(),
+      id: faker.number.int(),
+      location_subtype: faker.person.zodiacSign(),
+      month: faker.date.past().toISOString(),
+    };
+  }
+  public static SingleCrimeReportSync(): ICrimeReport {
+    return {
+      category: faker.word.noun(),
+      location_type: Math.random() < 0.5 ? null : faker.random.word(),
+      location: Math.random() < 0.5 ? null : faker.address.streetAddress(),
+      context: faker.lorem.sentence(),
+      outcome_status:
+        Math.random() < 0.5
+          ? null
+          : {
+              category: faker.random.word(),
+              date: faker.date.past().toISOString(),
+            },
+      persistent_id: faker.string.uuid(),
+      id: faker.number.int(),
+      location_subtype: faker.person.zodiacSign(),
+      month: faker.date.past().toISOString(),
+    };
   }
   public static async PoliceServiceMock(
     force: IAllForce

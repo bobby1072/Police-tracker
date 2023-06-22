@@ -1,8 +1,9 @@
-import { Grid, TableCell, TableRow, Typography } from "@mui/material";
+import { Grid, TableCell, TableRow } from "@mui/material";
 import MUIDataTable from "mui-datatables";
 import ICrimeReport from "../../common/ApiTypes/ICrimeReport";
 import { Date } from "../../utils/ExtendedDate";
 import { ErrorComp } from "../../common/Error";
+import { CrimeDisplay } from "../FindCrimeMap/CrimeDisplay";
 interface ICrimeTableProps {
   sortedCrimeReports: ICrimeReport[][];
 }
@@ -64,49 +65,7 @@ export const CrimeTable: React.FC<ICrimeTableProps> = ({
           return (
             <TableRow>
               <TableCell colSpan={colSpan}>
-                <Grid
-                  width="100%"
-                  container
-                  justifyContent="center"
-                  alignItems="center"
-                  direction="column"
-                  padding={1}
-                  textAlign="center"
-                >
-                  <Grid item width="100%">
-                    <Typography fontSize={30} variant="subtitle2">
-                      {crime.category}
-                    </Typography>
-                    <Grid item>
-                      <Typography fontSize={18} variant="subtitle2">
-                        {crime.month}
-                      </Typography>
-                    </Grid>
-                    <Grid item>
-                      <Typography
-                        fontSize={18}
-                        variant="subtitle2"
-                        sx={{ mb: 3 }}
-                      >
-                        {crime.id}
-                      </Typography>
-                    </Grid>
-                    {crime.context && (
-                      <Grid item>
-                        <Typography fontSize={18} variant="subtitle2">
-                          {crime.context}
-                        </Typography>
-                      </Grid>
-                    )}
-                    {crime.outcome_status?.category && (
-                      <Grid item>
-                        <Typography fontSize={18} variant="subtitle2">
-                          {crime.outcome_status.category}
-                        </Typography>
-                      </Grid>
-                    )}
-                  </Grid>
-                </Grid>
+                <CrimeDisplay crime={crime} />
               </TableCell>
             </TableRow>
           );

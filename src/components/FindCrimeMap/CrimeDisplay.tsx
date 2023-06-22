@@ -12,6 +12,7 @@ import ICrimeData from "../../common/ApiTypes/ICrimeData";
 import { useState } from "react";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
+import ICrimeReport from "../../common/ApiTypes/ICrimeReport";
 const StyledTextField = styled(TextField)(() => ({
   inputProps: {
     style: {
@@ -21,7 +22,7 @@ const StyledTextField = styled(TextField)(() => ({
 }));
 
 interface ICrimeDisplayProps {
-  crime: ICrimeData;
+  crime: ICrimeData | ICrimeReport;
 }
 const getLocationWidthPercent = (crime: ICrimeData) => {
   if (
@@ -32,8 +33,19 @@ const getLocationWidthPercent = (crime: ICrimeData) => {
     return "20%";
   } else return "30%";
 };
+
+const crimeIdentify = (crime: any): crime is ICrimeData => {
+  return (
+    crime?.location &&
+    !(typeof crime.location === "string") &&
+    "latitude" in crime.location &&
+    "longitude" in crime.location &&
+    "street" in crime.location
+  );
+};
 export const CrimeDisplay: React.FC<ICrimeDisplayProps> = ({ crime }) => {
   const [showPeristentId, setShowPeristentId] = useState<boolean>(false);
+  const isAdvancedCrime = crimeIdentify(crime);
   return (
     <Paper>
       <Grid
@@ -55,7 +67,7 @@ export const CrimeDisplay: React.FC<ICrimeDisplayProps> = ({ crime }) => {
         {crime.persistent_id && (
           <Grid
             item
-            width={showPeristentId ? "86%" : undefined}
+            width={showPeristentId ? "60%" : undefined}
             position="initial"
           >
             <StyledTextField
@@ -88,16 +100,17 @@ export const CrimeDisplay: React.FC<ICrimeDisplayProps> = ({ crime }) => {
         )}
         {crime.id && (
           <Grid item>
-            <Typography fontSize={15} variant="body1">
-              Id: {crime.id}
-            </Typography>
+            <StyledTextField label="Id" disabled fullWidth value={crime.id} />
           </Grid>
         )}
         {crime.month && (
           <Grid item>
-            <Typography variant="body1" fontSize={15}>
-              Month: {crime.month}
-            </Typography>
+            <StyledTextField
+              label="Month"
+              disabled
+              fullWidth
+              value={crime.month}
+            />
           </Grid>
         )}
         {crime.context && (
@@ -108,7 +121,7 @@ export const CrimeDisplay: React.FC<ICrimeDisplayProps> = ({ crime }) => {
           </Grid>
         )}
         <Grid item sx={{ mb: 4 }} />
-        {crime.location && (
+        {crime.location && isAdvancedCrime && (
           <Grid item width="100%">
             <Typography fontSize={28} variant="body1">
               Location
