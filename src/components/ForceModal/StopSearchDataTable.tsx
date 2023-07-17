@@ -2,7 +2,8 @@ import MUIDataTable from "mui-datatables";
 import IPersonSearch from "../../common/ApiTypes/IPersonSearch";
 import { Date } from "../../utils/ExtendedDate";
 import { ErrorComp } from "../../common/Error";
-import { Grid, TableCell, TableRow, Typography } from "@mui/material";
+import { Grid, TableCell, TableRow } from "@mui/material";
+import { StopSearchDisplay } from "./StopSearchDisplay";
 
 interface IStopSearchDataTableProps {
   searchData: IPersonSearch[][];
@@ -104,48 +105,7 @@ export const StopSearchDataTable: React.FC<IStopSearchDataTableProps> = ({
           return (
             <TableRow>
               <TableCell colSpan={colSpan}>
-                <Grid
-                  container
-                  direction="column"
-                  justifyContent="center"
-                  alignItems="center"
-                  textAlign="center"
-                  padding={2}
-                  spacing={2}
-                >
-                  <Grid item>
-                    <Typography variant="subtitle2" fontSize={30}>
-                      Date: {new Date(record.datetime).getPrettyDate()}
-                    </Typography>
-                  </Grid>
-                  <Grid item>
-                    <Typography variant="subtitle2" fontSize={18}>
-                      Age range: {record.age_range}
-                    </Typography>
-                  </Grid>
-                  <Grid item>
-                    <Typography variant="subtitle2" fontSize={18}>
-                      Gender: {record.gender}
-                    </Typography>
-                  </Grid>
-                  {record.location?.street?.name &&
-                    record.location.street.name.toLowerCase() !==
-                      "on or near " && (
-                      <Grid item>
-                        <Typography variant="subtitle2" fontSize={15}>
-                          Location: {record.location.street.name}
-                        </Typography>
-                      </Grid>
-                    )}
-                  <Grid item>
-                    <Typography variant="subtitle2" fontSize={15}>
-                      Legislation: {record.legislation}
-                    </Typography>
-                  </Grid>
-                  <Grid item>
-                    <Typography variant="subtitle2" fontSize={15}></Typography>
-                  </Grid>
-                </Grid>
+                <StopSearchDisplay stopSearch={record} />
               </TableCell>
             </TableRow>
           );

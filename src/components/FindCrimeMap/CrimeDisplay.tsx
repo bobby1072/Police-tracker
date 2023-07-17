@@ -13,7 +13,7 @@ import { useState } from "react";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import ICrimeReport from "../../common/ApiTypes/ICrimeReport";
-const StyledTextField = styled(TextField)(() => ({
+export const StyledTextField = styled(TextField)(() => ({
   inputProps: {
     style: {
       width: "auto",
@@ -25,24 +25,20 @@ interface ICrimeDisplayProps {
   crime: ICrimeData | ICrimeReport;
 }
 const getLocationWidthPercent = (crime: ICrimeData) => {
-  if (
-    crime.location?.street?.name &&
-    crime.location.latitude &&
-    crime.location.longitude
-  ) {
-    return "20%";
-  } else return "30%";
+  const filterList = Object.entries(crime.location).filter(
+    ([key, val]) =>
+      ((key === "latitude" || key === "longitude") && Boolean(val)) ||
+      (key === "street" && typeof val !== "string" && Boolean(val.name))
+  );
+  return (90 / filterList.length).toString() + "%";
 };
 
-const crimeIdentify = (crime: any): crime is ICrimeData => {
-  return (
-    crime?.location &&
-    !(typeof crime.location === "string") &&
-    "latitude" in crime.location &&
-    "longitude" in crime.location &&
-    "street" in crime.location
-  );
-};
+const crimeIdentify = (crime: any): crime is ICrimeData =>
+  crime?.location &&
+  !(typeof crime.location === "string") &&
+  "latitude" in crime.location &&
+  "longitude" in crime.location &&
+  "street" in crime.location;
 export const CrimeDisplay: React.FC<ICrimeDisplayProps> = ({ crime }) => {
   const [showPeristentId, setShowPeristentId] = useState<boolean>(false);
   const isAdvancedCrime = crimeIdentify(crime);
@@ -67,7 +63,7 @@ export const CrimeDisplay: React.FC<ICrimeDisplayProps> = ({ crime }) => {
         {crime.persistent_id && (
           <Grid
             item
-            width={showPeristentId ? "60%" : undefined}
+            width={showPeristentId ? "90%" : undefined}
             position="initial"
           >
             <StyledTextField
@@ -121,7 +117,7 @@ export const CrimeDisplay: React.FC<ICrimeDisplayProps> = ({ crime }) => {
           </Grid>
         )}
         <Grid item sx={{ mb: 4 }} />
-        {crime.location && isAdvancedCrime && (
+        {crime.location && (
           <Grid item width="100%">
             <Typography fontSize={28} variant="body1">
               Location
@@ -134,7 +130,17 @@ export const CrimeDisplay: React.FC<ICrimeDisplayProps> = ({ crime }) => {
               spacing={2}
               direction="row"
             >
-              {crime.location.latitude && (
+              {typeof crime.location === "string" && (
+                <Grid item width="100%">
+                  <StyledTextField
+                    fullWidth
+                    disabled
+                    label="Location"
+                    value={crime.location}
+                  />
+                </Grid>
+              )}
+              {isAdvancedCrime && crime.location.latitude && (
                 <Grid item width={getLocationWidthPercent(crime)}>
                   <StyledTextField
                     fullWidth
@@ -144,7 +150,7 @@ export const CrimeDisplay: React.FC<ICrimeDisplayProps> = ({ crime }) => {
                   />
                 </Grid>
               )}
-              {crime.location.longitude && (
+              {isAdvancedCrime && crime.location.longitude && (
                 <Grid item width={getLocationWidthPercent(crime)}>
                   <StyledTextField
                     fullWidth
@@ -154,7 +160,7 @@ export const CrimeDisplay: React.FC<ICrimeDisplayProps> = ({ crime }) => {
                   />
                 </Grid>
               )}
-              {crime.location.street.name && (
+              {isAdvancedCrime && crime.location.street.name && (
                 <Grid item width={getLocationWidthPercent(crime)}>
                   <StyledTextField
                     fullWidth
@@ -181,7 +187,7 @@ export const CrimeDisplay: React.FC<ICrimeDisplayProps> = ({ crime }) => {
               direction="row"
             >
               {crime.outcome_status.category && (
-                <Grid item width="30%">
+                <Grid item width="45%">
                   <StyledTextField
                     disabled
                     fullWidth
@@ -191,7 +197,7 @@ export const CrimeDisplay: React.FC<ICrimeDisplayProps> = ({ crime }) => {
                 </Grid>
               )}
               {crime.outcome_status.date && (
-                <Grid item width="30%">
+                <Grid item width="45%">
                   <StyledTextField
                     fullWidth
                     disabled

@@ -1,4 +1,4 @@
-interface Location {
+interface ILocation {
   latitude: string;
   street: {
     id: number;
@@ -23,7 +23,7 @@ export default interface IPersonSearch {
   datetime: string;
   removal_of_more_than_outer_clothing: boolean;
   outcome_object: OutcomeObject;
-  location: Location | null;
+  location: ILocation | null;
   operation: null | string;
   officer_defined_ethnicity: string;
   type: string;
