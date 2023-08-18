@@ -9,8 +9,8 @@ import IAdvancedCrimeData from "../common/ApiTypes/IAdvancedCrimeData";
 
 export const useStopSearchMutate = () =>
   useMutation<IPersonSearch[][], AxiosError, any>(
-    async ({ force, dates }: { force: IAllForce; dates: Date[] }) =>
-      await Promise.all(
+    ({ force, dates }: { force: IAllForce; dates: Date[] }) =>
+      Promise.all(
         dates.map((x) => ApiServiceProvider.ForceStopSearches(force, x))
       )
   );
@@ -23,13 +23,13 @@ export const useCrimeWithLocation = (
     AxiosError,
     { lat: number; lng: number; date?: Date }
   >(
-    async ({ lat, lng, date }: { lat: number; lng: number; date?: Date }) =>
-      await ApiServiceProvider.CrimeWithLocation(lat, lng, date),
+    ({ lat, lng, date }: { lat: number; lng: number; date?: Date }) =>
+      ApiServiceProvider.CrimeWithLocation(lat, lng, date),
     { ...(onErrorFunc && { onError: onErrorFunc }) }
   );
 
 export const useAdvancedCrimeSearch = () =>
   useMutation<IAdvancedCrimeData, AxiosError, { persistentId: string }>(
-    async ({ persistentId }: { persistentId: string }) =>
-      await ApiServiceProvider.OutcomeForSpecificCrime(persistentId)
+    ({ persistentId }: { persistentId: string }) =>
+      ApiServiceProvider.OutcomeForSpecificCrime(persistentId)
   );

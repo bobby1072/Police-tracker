@@ -53,7 +53,7 @@ export const ForceLocater: React.FC = () => {
             spacing={1}
           >
             <Grid item width="100%">
-              <Paper>
+              <Paper sx={{ backgroundColor: "#f9f9f9" }}>
                 {allForce && !forceLoading && !forceErrors && (
                   <div>
                     <Tabs

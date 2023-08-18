@@ -96,7 +96,7 @@ export const MainAppBar: React.FC = () => {
               <ListItemIcon>
                 <ModeStandbyIcon />
               </ListItemIcon>
-              <ListItemText primary="Force" />
+              <ListItemText primary="Police forces" />
             </ListItemButton>
           </ListItem>
           <ListItem

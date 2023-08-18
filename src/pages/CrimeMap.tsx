@@ -73,7 +73,7 @@ export const CrimeMap: React.FC = () => {
               </Grid>
               {crimeError && (
                 <Grid item width="100%">
-                  <Paper>
+                  <Paper sx={{ backgroundColor: "#f9f9f9" }}>
                     <Grid
                       container
                       justifyContent="center"

@@ -15,7 +15,7 @@ export interface IlatLng {
 interface IFindCrimeMApContainerProps {
   setDate: (data: Date) => void;
   date?: Date;
-  setLatLng: (value: React.SetStateAction<IlatLng | undefined>) => void;
+  setLatLng: (value: IlatLng | undefined) => void;
   latLng?: IlatLng;
   maxCrimeDate?: Date;
 }
@@ -27,7 +27,7 @@ export const FindCrimeMapContainer: React.FC<IFindCrimeMApContainerProps> = ({
   maxCrimeDate,
 }) => {
   return (
-    <Paper>
+    <Paper sx={{ backgroundColor: "#f9f9f9" }}>
       <Grid
         container
         justifyContent="center"
