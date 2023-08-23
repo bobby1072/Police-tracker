@@ -1,5 +1,6 @@
-import { Grid, Paper, Typography, styled } from "@mui/material";
+import { Grid, Typography, styled } from "@mui/material";
 import { ErrorComp } from "../../common/Error";
+import { BorderStyledPaper } from "../../common/BorderStyledPaper";
 interface IForceJsonViewerProps {
   maxHeight: string;
   title: string;
@@ -63,7 +64,7 @@ export const JsonViewer: React.FC<IForceJsonViewerProps> = ({
   const jsonInfo = JSON.stringify(jsonData, null, 2);
   return (
     <div aria-label="jsonViewer">
-      <Paper sx={{ backgroundColor: "#191919" }}>
+      <BorderStyledPaper sx={{ backgroundColor: "#191919" }}>
         <ScrollableGrid
           container
           padding={1}
@@ -88,7 +89,7 @@ export const JsonViewer: React.FC<IForceJsonViewerProps> = ({
             </pre>
           </Grid>
         </ScrollableGrid>
-      </Paper>
+      </BorderStyledPaper>
     </div>
   );
 };

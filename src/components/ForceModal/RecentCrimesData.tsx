@@ -7,7 +7,6 @@ import {
   IconButton,
   InputLabel,
   MenuItem,
-  Paper,
   Select,
   Tab,
   Tabs,
@@ -27,6 +26,7 @@ import { CrimeBar } from "../CrimeGraphs/CrimeBar";
 import { CrimeTable } from "./CrimeTable";
 import { a11yProps } from "./ForceModalAddOn";
 import { JsonViewer } from "../ForceJsonViewer/JsonViewer";
+import { BorderStyledPaper } from "../../common/BorderStyledPaper";
 
 interface IRecentCrimesDataProps {
   stopSearchDate: Date;
@@ -89,7 +89,7 @@ export const RecentCrimesData: React.FC<IRecentCrimesDataProps> = ({
   const [displayType, setDisplayType] = useState<number>(0);
 
   return (
-    <Paper>
+    <BorderStyledPaper>
       {fetchedData && !crimeLoading && !crimeError ? (
         <Grid
           aria-label="recentCrimeData"
@@ -131,7 +131,7 @@ export const RecentCrimesData: React.FC<IRecentCrimesDataProps> = ({
                 </Grid>
               )}
               <Grid item width="60%">
-                <Paper>
+                <BorderStyledPaper>
                   <Autocomplete
                     clearIcon={
                       <IconButton
@@ -197,7 +197,7 @@ export const RecentCrimesData: React.FC<IRecentCrimesDataProps> = ({
                       />
                     )}
                   />
-                </Paper>
+                </BorderStyledPaper>
               </Grid>
             </Grid>
           </Grid>
@@ -214,7 +214,7 @@ export const RecentCrimesData: React.FC<IRecentCrimesDataProps> = ({
             width="100%"
             minHeight={fetchedData.length >= 1 ? "90vh" : undefined}
           >
-            <Paper>
+            <BorderStyledPaper>
               <Tabs
                 value={displayType}
                 onChange={(event: React.SyntheticEvent, newValue: number) => {
@@ -252,7 +252,7 @@ export const RecentCrimesData: React.FC<IRecentCrimesDataProps> = ({
                   title="Crime reports"
                 />
               )}
-            </Paper>
+            </BorderStyledPaper>
           </Grid>
         </Grid>
       ) : (
@@ -269,6 +269,6 @@ export const RecentCrimesData: React.FC<IRecentCrimesDataProps> = ({
           )}
         </Grid>
       )}
-    </Paper>
+    </BorderStyledPaper>
   );
 };

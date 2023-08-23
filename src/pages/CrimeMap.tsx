@@ -1,4 +1,4 @@
-import { Grid, Paper } from "@mui/material";
+import { Grid } from "@mui/material";
 import { MainAppBar } from "../common/AppBar";
 import {
   FindCrimeMapContainer,
@@ -12,6 +12,7 @@ import { CrimeDisplay } from "../components/FindCrimeMap/CrimeDisplay";
 import { Loading } from "../common/Loading";
 import { AxiosError } from "axios";
 import { useCrimeLastUpdated } from "../utils/Querys";
+import { BorderStyledPaper } from "../common/BorderStyledPaper";
 const getErrorMessage = (error: AxiosError): string => {
   if (error.response?.status === 404) {
     return "Not in police jurisdiction";
@@ -73,7 +74,7 @@ export const CrimeMap: React.FC = () => {
               </Grid>
               {crimeError && (
                 <Grid item width="100%">
-                  <Paper sx={{ backgroundColor: "#f9f9f9" }}>
+                  <BorderStyledPaper sx={{ backgroundColor: "#f9f9f9" }}>
                     <Grid
                       container
                       justifyContent="center"
@@ -84,12 +85,12 @@ export const CrimeMap: React.FC = () => {
                         error={new Error(getErrorMessage(crimeError))}
                       />
                     </Grid>
-                  </Paper>
+                  </BorderStyledPaper>
                 </Grid>
               )}
               {crimeData && crimeData.length === 0 && (
                 <Grid item width="100%" minHeight="15vh">
-                  <Paper>
+                  <BorderStyledPaper>
                     <Grid
                       container
                       justifyContent="center"
@@ -98,12 +99,12 @@ export const CrimeMap: React.FC = () => {
                     >
                       <ErrorComp error={new Error("No crimes found")} />
                     </Grid>
-                  </Paper>
+                  </BorderStyledPaper>
                 </Grid>
               )}
               {crimeLoading && (
                 <Grid item width="100%" minHeight="15vh">
-                  <Paper>
+                  <BorderStyledPaper>
                     <Grid
                       container
                       justifyContent="center"
@@ -112,7 +113,7 @@ export const CrimeMap: React.FC = () => {
                     >
                       <Loading />
                     </Grid>
-                  </Paper>
+                  </BorderStyledPaper>
                 </Grid>
               )}
               {crimeData &&
@@ -125,7 +126,7 @@ export const CrimeMap: React.FC = () => {
             </Grid>
           )}
           {crimeUpdateLoading && (
-            <Paper>
+            <BorderStyledPaper>
               <Grid
                 container
                 justifyContent="center"
@@ -137,7 +138,7 @@ export const CrimeMap: React.FC = () => {
                   <Loading />
                 </Grid>
               </Grid>
-            </Paper>
+            </BorderStyledPaper>
           )}
         </div>
       </div>

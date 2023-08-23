@@ -131,7 +131,7 @@ export const ModalAddonFunc: React.FC<IModalAddOnFuncProps> = ({
                   Officer information
                 </Typography>
               </AccordionSummary>
-              <Divider />
+              <Divider sx={{ mb: 1 }} />
               <AccordionDetails>
                 {accordionData.officerBio && (
                   <OfficerData officers={officerBio} />
@@ -196,8 +196,8 @@ export const ModalAddonFunc: React.FC<IModalAddOnFuncProps> = ({
                 Recent crime reports
               </Typography>
             </AccordionSummary>
-            <Divider />
-            <AccordionDetails>
+            <Divider sx={{ mb: 1 }} />
+            <AccordionDetails sx={{ padding: 1 }}>
               {accordionData.recentCrimes && (
                 <RecentCrimesData
                   existingCrimeReports={crimeReport}

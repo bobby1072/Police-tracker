@@ -1,4 +1,4 @@
-import { Grid, Paper, Tabs, Tab, Divider } from "@mui/material";
+import { Grid, Tabs, Tab, Divider } from "@mui/material";
 import { MainAppBar } from "../common/AppBar";
 import { ForcesDataArray } from "../components/ForcesDataArray/ForcesDataArray";
 import IAllForce from "../common/ApiTypes/IAllForces";
@@ -12,6 +12,7 @@ import Constants from "../common/Constants";
 import { Date } from "../utils/ExtendedDate";
 import { ErrorComp } from "../common/Error";
 import { JsonViewer } from "../components/ForceJsonViewer/JsonViewer";
+import { BorderStyledPaper } from "../common/BorderStyledPaper";
 const a11yProps = (index: number) => {
   return {
     id: `simple-tab-${index}`,
@@ -53,7 +54,7 @@ export const ForceLocater: React.FC = () => {
             spacing={1}
           >
             <Grid item width="100%">
-              <Paper sx={{ backgroundColor: "#f9f9f9" }}>
+              <BorderStyledPaper sx={{ backgroundColor: "#f9f9f9" }}>
                 {allForce && !forceLoading && !forceErrors && (
                   <div>
                     <Tabs
@@ -134,7 +135,7 @@ export const ForceLocater: React.FC = () => {
                     )}
                   </Grid>
                 )}
-              </Paper>
+              </BorderStyledPaper>
             </Grid>
           </Grid>
         </div>

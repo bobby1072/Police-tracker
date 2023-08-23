@@ -1,16 +1,17 @@
-import { Divider, Grid, Paper, Tab, Tabs } from "@mui/material";
+import { Divider, Grid, Tab, Tabs } from "@mui/material";
 import { a11yProps } from "./ForceModalAddOn";
 import { useState } from "react";
 import { OfficerBioTable } from "./OfficerBioTable";
 import IOfficerBio from "../../common/ApiTypes/IOfficerBio";
 import { JsonViewer } from "../ForceJsonViewer/JsonViewer";
+import { BorderStyledPaper } from "../../common/BorderStyledPaper";
 interface IOfficerDataProps {
   officers: IOfficerBio[];
 }
 export const OfficerData: React.FC<IOfficerDataProps> = ({ officers }) => {
   const [displayType, setDisplayType] = useState<number>(0);
   return (
-    <Paper>
+    <BorderStyledPaper>
       <Grid
         container
         justifyContent="center"
@@ -46,6 +47,6 @@ export const OfficerData: React.FC<IOfficerDataProps> = ({ officers }) => {
           )}
         </Grid>
       </Grid>
-    </Paper>
+    </BorderStyledPaper>
   );
 };

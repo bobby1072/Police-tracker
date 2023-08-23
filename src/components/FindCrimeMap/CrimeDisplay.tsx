@@ -2,7 +2,6 @@ import {
   Divider,
   Grid,
   IconButton,
-  Paper,
   Typography,
   TextField,
   styled,
@@ -13,6 +12,7 @@ import { useState } from "react";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import ICrimeReport from "../../common/ApiTypes/ICrimeReport";
+import { BorderStyledPaper } from "../../common/BorderStyledPaper";
 export const StyledTextField = styled(TextField)(() => ({
   inputProps: {
     style: {
@@ -43,7 +43,7 @@ export const CrimeDisplay: React.FC<ICrimeDisplayProps> = ({ crime }) => {
   const [showPeristentId, setShowPeristentId] = useState<boolean>(false);
   const isAdvancedCrime = crimeIdentify(crime);
   return (
-    <Paper>
+    <BorderStyledPaper>
       <Grid
         container
         alignItems="center"
@@ -210,6 +210,6 @@ export const CrimeDisplay: React.FC<ICrimeDisplayProps> = ({ crime }) => {
           </Grid>
         )}
       </Grid>
-    </Paper>
+    </BorderStyledPaper>
   );
 };

@@ -1,5 +1,4 @@
 import {
-  Paper,
   Grid,
   Typography,
   Divider,
@@ -26,6 +25,7 @@ import { StopSearchDataTable } from "./StopSearchDataTable";
 import { ErrorComp } from "../../common/Error";
 import { JsonViewer } from "../ForceJsonViewer/JsonViewer";
 import { Date } from "../../utils/ExtendedDate";
+import { BorderStyledPaper } from "../../common/BorderStyledPaper";
 interface IForceStopSearchProps {
   stopSearchDates: Date[];
   force: IAllForce;
@@ -74,7 +74,7 @@ export const ForceStopSearchData: React.FC<IForceStopSearchProps> = ({
   }, [selectedDates, stopSearchRefetch, fetchedData]);
   const [displayType, setDisplayType] = useState<number>(0);
   return (
-    <Paper>
+    <BorderStyledPaper>
       {fetchedData && !stopSearchLoading && !stopSearchError ? (
         <Grid
           container
@@ -125,7 +125,7 @@ export const ForceStopSearchData: React.FC<IForceStopSearchProps> = ({
                 </Grid>
               )}
               <Grid item width="60%">
-                <Paper>
+                <BorderStyledPaper>
                   <Autocomplete
                     clearIcon={
                       <IconButton
@@ -191,7 +191,7 @@ export const ForceStopSearchData: React.FC<IForceStopSearchProps> = ({
                       />
                     )}
                   />
-                </Paper>
+                </BorderStyledPaper>
               </Grid>
             </Grid>
           </Grid>
@@ -208,7 +208,7 @@ export const ForceStopSearchData: React.FC<IForceStopSearchProps> = ({
             width="100%"
             minHeight={fetchedData.length >= 1 ? "90vh" : undefined}
           >
-            <Paper>
+            <BorderStyledPaper>
               <Tabs
                 value={displayType}
                 onChange={(event: React.SyntheticEvent, newValue: number) => {
@@ -246,7 +246,7 @@ export const ForceStopSearchData: React.FC<IForceStopSearchProps> = ({
                   title="Stop search data"
                 />
               )}
-            </Paper>
+            </BorderStyledPaper>
           </Grid>
         </Grid>
       ) : (
@@ -263,6 +263,6 @@ export const ForceStopSearchData: React.FC<IForceStopSearchProps> = ({
           )}
         </Grid>
       )}
-    </Paper>
+    </BorderStyledPaper>
   );
 };

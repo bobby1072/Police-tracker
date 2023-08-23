@@ -1,10 +1,11 @@
-import { Grid, Paper, TextField } from "@mui/material";
+import { Grid, TextField } from "@mui/material";
 import { LatLngMap } from "../MapComponents/LatLngMap";
 import dayjs from "dayjs";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { Date } from "../../utils/ExtendedDate";
+import { BorderStyledPaper } from "../../common/BorderStyledPaper";
 const checkNumber = (val: any): val is number => {
   return typeof val === "number" && !isNaN(val);
 };
@@ -27,7 +28,7 @@ export const FindCrimeMapContainer: React.FC<IFindCrimeMApContainerProps> = ({
   maxCrimeDate,
 }) => {
   return (
-    <Paper sx={{ backgroundColor: "#f9f9f9" }}>
+    <BorderStyledPaper sx={{ backgroundColor: "#f9f9f9" }}>
       <Grid
         container
         justifyContent="center"
@@ -36,7 +37,7 @@ export const FindCrimeMapContainer: React.FC<IFindCrimeMApContainerProps> = ({
         spacing={1}
       >
         <Grid item width="25%">
-          <Paper>
+          <BorderStyledPaper>
             <Grid
               container
               justifyContent="center"
@@ -98,7 +99,7 @@ export const FindCrimeMapContainer: React.FC<IFindCrimeMApContainerProps> = ({
                 </LocalizationProvider>
               </Grid>
             </Grid>
-          </Paper>
+          </BorderStyledPaper>
         </Grid>
 
         <Grid item width="75%" height="50vh">
@@ -111,6 +112,6 @@ export const FindCrimeMapContainer: React.FC<IFindCrimeMApContainerProps> = ({
           />
         </Grid>
       </Grid>
-    </Paper>
+    </BorderStyledPaper>
   );
 };

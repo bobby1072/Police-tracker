@@ -1,5 +1,6 @@
-import { useTheme, Grid, Paper, Typography, Button } from "@mui/material";
+import { useTheme, Grid, Typography, Button } from "@mui/material";
 import IAllForce from "../../common/ApiTypes/IAllForces";
+import { BorderStyledPaper } from "../../common/BorderStyledPaper";
 interface IForceGridTabProps {
   force: IAllForce;
   setForce: (data: IAllForce) => void;
@@ -10,7 +11,7 @@ export const ForceGridTab: React.FC<IForceGridTabProps> = ({
 }) => {
   const theme = useTheme();
   return (
-    <Paper
+    <BorderStyledPaper
       sx={{
         backgroundColor: theme.palette.primary.main,
         minHeight: "28vh",
@@ -48,6 +49,6 @@ export const ForceGridTab: React.FC<IForceGridTabProps> = ({
           </Button>
         </Grid>
       </Grid>
-    </Paper>
+    </BorderStyledPaper>
   );
 };

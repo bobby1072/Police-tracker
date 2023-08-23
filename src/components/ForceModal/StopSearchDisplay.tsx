@@ -1,7 +1,8 @@
-import { Grid, Typography, Paper, Divider } from "@mui/material";
+import { Grid, Typography, Divider } from "@mui/material";
 import IPersonSearch from "../../common/ApiTypes/IPersonSearch";
 import { StyledTextField } from "../FindCrimeMap/CrimeDisplay";
 import { Date } from "../../utils/ExtendedDate";
+import { BorderStyledPaper } from "../../common/BorderStyledPaper";
 interface IStopSearchDisplayProps {
   stopSearch: IPersonSearch;
 }
@@ -35,7 +36,7 @@ export const StopSearchDisplay: React.FC<IStopSearchDisplayProps> = ({
     type,
   } = stopSearch;
   return (
-    <Paper>
+    <BorderStyledPaper>
       <Grid
         container
         alignItems="center"
@@ -192,6 +193,6 @@ export const StopSearchDisplay: React.FC<IStopSearchDisplayProps> = ({
           </>
         )}
       </Grid>
-    </Paper>
+    </BorderStyledPaper>
   );
 };

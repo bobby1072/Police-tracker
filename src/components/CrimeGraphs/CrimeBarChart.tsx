@@ -1,6 +1,7 @@
 import ICrimeReport from "../../common/ApiTypes/ICrimeReport";
 import ReactApexChart from "react-apexcharts";
-import { Paper, Typography } from "@mui/material";
+import { Typography } from "@mui/material";
+import { BorderStyledPaper } from "../../common/BorderStyledPaper";
 interface ICrimeBarChartProps {
   crimes: ICrimeReport[];
 }
@@ -82,7 +83,7 @@ export const CrimeBarChart: React.FC<ICrimeBarChartProps> = ({ crimes }) => {
     colors: Object.entries(categories).map(() => generateBrightRandomColor()),
   };
   return (
-    <Paper sx={{ padding: 1 }}>
+    <BorderStyledPaper sx={{ padding: 1 }}>
       <Typography variant="subtitle2" fontSize={25}>
         Recent crime reports
       </Typography>
@@ -92,6 +93,6 @@ export const CrimeBarChart: React.FC<ICrimeBarChartProps> = ({ crimes }) => {
         type="pie"
         height={700}
       />
-    </Paper>
+    </BorderStyledPaper>
   );
 };
