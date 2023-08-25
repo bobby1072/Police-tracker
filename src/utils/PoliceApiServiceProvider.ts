@@ -9,8 +9,8 @@ import IPersonSearch from "../common/ApiTypes/IPersonSearch";
 import { Date } from "./ExtendedDate";
 import ICrimeLastUpdate from "../common/ApiTypes/ICrimeLastUpdate";
 import IAdvancedCrimeData from "../common/ApiTypes/IAdvancedCrimeData";
-export default abstract class ApiServiceProvider {
-  private static _httpClient = axios.create({
+export default abstract class PoliceApiServiceProvider {
+  private static readonly _httpClient = axios.create({
     baseURL:
       process.env.NODE_ENV === "test" ? "" : "https://data.police.uk/api",
   });

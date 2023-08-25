@@ -3,13 +3,13 @@ import IAllForce from "../common/ApiTypes/IAllForces";
 import ICrimeReport from "../common/ApiTypes/ICrimeReport";
 import IPoliceService from "../common/ApiTypes/IPoliceService";
 import IOfficerBio from "../common/ApiTypes/IOfficerBio";
-import ApiServiceProvider from "./ApiServiceProvider";
 import { AxiosError } from "axios";
 import ICrimeStreetDates from "../common/ApiTypes/ICrimeStreetDates";
 import Constants from "../common/Constants";
 import IPersonSearch from "../common/ApiTypes/IPersonSearch";
 import { fixDate } from "../components/ForceModal/ForceStopSearchData";
 import { Date } from "./ExtendedDate";
+import PoliceApiServiceProvider from "./PoliceApiServiceProvider";
 const generalRetryFunc = (count: number, error: AxiosError<unknown, any>) =>
   Number(error.response?.status) >= 400 || count >= 3 ? false : true;
 
@@ -23,7 +23,7 @@ export const useCrimeLastUpdated = () => {
       );
       if (exists) {
         return exists;
-      } else return await ApiServiceProvider.CrimeLastUpdated();
+      } else return await PoliceApiServiceProvider.CrimeLastUpdated();
     },
     { retry: generalRetryFunc }
   );
@@ -39,7 +39,7 @@ export const useAllForces = () => {
       if (exists) {
         return exists;
       } else {
-        return await ApiServiceProvider.GetAllForces();
+        return await PoliceApiServiceProvider.GetAllForces();
       }
     },
     {
@@ -73,9 +73,9 @@ export const useForceCrimeInfoAndOfficers = (force: IAllForce) => {
         return exists;
       } else {
         return await Promise.all([
-          ApiServiceProvider.ForceCrimes({ force: force }),
-          ApiServiceProvider.GetForceInfo(force),
-          ApiServiceProvider.ForceOfficers(force),
+          PoliceApiServiceProvider.ForceCrimes({ force: force }),
+          PoliceApiServiceProvider.GetForceInfo(force),
+          PoliceApiServiceProvider.ForceOfficers(force),
         ]);
       }
     },
@@ -133,7 +133,7 @@ export const useForceCrimes = (
         filteredDatesArray.length >= 1
           ? await Promise.all(
               filteredDatesArray.map((x) =>
-                ApiServiceProvider.ForceCrimes({ force, date: x })
+                PoliceApiServiceProvider.ForceCrimes({ force, date: x })
               )
             )
           : [];
@@ -194,7 +194,7 @@ export const useForceStopAndSearch = (
         filteredDatesArray.length >= 1
           ? await Promise.all(
               filteredDatesArray.map((x) =>
-                ApiServiceProvider.ForceStopSearches(force, x)
+                PoliceApiServiceProvider.ForceStopSearches(force, x)
               )
             )
           : [];
@@ -218,7 +218,7 @@ export const useStopSearchAvailability = () => {
       if (exists) {
         return exists;
       } else {
-        return await ApiServiceProvider.ForceStopSearchAvailability();
+        return await PoliceApiServiceProvider.ForceStopSearchAvailability();
       }
     },
     {
